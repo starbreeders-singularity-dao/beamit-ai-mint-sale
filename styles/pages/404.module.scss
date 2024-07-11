@@ -1,0 +1,21 @@
+.container {
+    min-height: 65vh;
+    text-align: center;
+
+    @media (max-width: 479px) {
+        min-height: initial;
+    }
+
+    .inner {
+        padding: 10px 20px;
+
+        flex-direction: column;
+
+        a {
+            font-weight: 800;
+        }
+        > div {
+            margin: 0 auto;
+        }
+    }
+}

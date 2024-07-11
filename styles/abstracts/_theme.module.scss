@@ -1,0 +1,118 @@
+$primary: #2196f3;
+
+$themes: (
+  white: #fff,
+  black: #000,
+  activeColor: $primary,
+  primaryBlue: $primary,
+  primaryGreen: #00e676,
+  primaryRed: #c62828,
+  primaryOrange: #d84315,
+  primaryTextColor: #212121,
+  nextJSprogressBarColor: $primary,
+  //******* EXTRA COLORS ================= // primary primaryLight: #e3f2fd,
+    primaryMain: #2196f3,
+  primaryDark: #1e88e5,
+  primary200: #90caf9,
+  primary800: #1565c0,
+
+  // secondary
+  secondaryLight: #ede7f6,
+  secondaryMain: #673ab7,
+  secondaryDark: #5e35b1,
+  secondary200: #b39ddb,
+  secondary800: #4527a0,
+
+  // success Colors
+  successLight: #b9f6ca,
+  success200: #69f0ae,
+  successMain: #00e676,
+  successDark: #00c853,
+
+  // error
+  errorLight: #ef9a9a,
+  errorMain: #f44336,
+  errorDark: #c62828,
+
+  // orange
+  orangeLight: #fbe9e7,
+  orangeMain: #ffab91,
+  orangeDark: #d84315,
+
+  // warning
+  warningLight: #fff8e1,
+  warningMain: #ffe57f,
+  warningDark: #ffc107,
+
+  // grey
+  grey50: #fafafa,
+  grey51: #f2f2f2,
+  grey100: #f5f5f5,
+  grey200: #eeeeee,
+  grey300: #e0e0e0,
+  grey500: #9e9e9e,
+  grey600: #757575,
+  grey700: #616161,
+  grey900: #212121,
+
+  // custom colrs
+  color329691: #329691,
+  color3A4950: #3a4950,
+  color07171E: #07171e,
+  color266C87: #266c87,
+  color205C73: #205c73,
+
+  colore1e3e4: #e1e3e4,
+
+  colorF6FAFA: #f6fafa,
+  colorB4DFDD: #b4dfdd,
+  color233E3C: #233e3c,
+  color1793CD: #1793cd,
+  color86959C: #86959c,
+  colorF3F8FA: #f3f8fa,
+  colorf9f9f9: #f9f9f9,
+  color63cc74: #63cc74,
+  colore3f7d7: #e3f7d7,
+  color9e9e9e: #9e9e9e,
+  color768186: #768186,
+
+  colorEBEBEB: #ebebeb,
+  color748992: #748992,
+  color32969119: #32969119,
+  colorF4F7FF: #f4f7ff,
+  color95C8C6: #95c8c6,
+  colorD2D2D2: #d2d2d2,
+  color9D9D9D: #9d9d9d,
+  colorCAE2E1: #cae2e1,
+
+  colorF2F2F2: #f2f2f2,
+  colorF9F9F9: #f9f9f9,
+  color637F8A: #637f8a,
+  colorE8E8E8: #e8e8e8,
+  colorF1F1F1: #f1f1f1,
+  colorF4F7F9: #f4f7f9,
+  colorff0000: #ff0000,
+  color848484: #848484,
+  color0000FF: #0000ff,
+  color747FF4: #747ff4,
+  bodyFontColor: #585858
+);
+
+// ** LIST OF ALL COLORS **
+@mixin printVariables() {
+  @each $key, $value in $themes {
+    --#{$key}: #{$value};
+  }
+}
+
+// ** EXPORT COLORS
+
+@mixin exportVariables() {
+  @each $key, $value in $themes {
+    #{$key}: #{$value};
+  }
+}
+
+:export {
+  @include exportVariables();
+}

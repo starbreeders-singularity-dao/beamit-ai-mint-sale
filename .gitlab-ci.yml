@@ -1,0 +1,12 @@
+dev-deployment:
+ variables:
+   GIT_STRATEGY: fetch
+ script:
+   - bash ~/gitlab/NextJS/nextjs-projectdeploy.sh
+ environment:
+     name: Development
+     url : https://beamit-space-ui.dedicateddevelopers.us/
+ tags:
+   - node-docker4
+ only:
+   - dev

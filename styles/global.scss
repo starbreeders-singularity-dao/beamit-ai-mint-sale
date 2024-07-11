@@ -1,0 +1,97 @@
+@import "./abstracts/theme.module";
+
+@font-face {
+  font-family: "square721_btroman";
+  src: url("../public/assets/fonts/square721_bt_roman-webfont.eot");
+  src: url("../public/assets/fonts/square721_bt_roman-webfont.eot?#iefix")
+      format("embedded-opentype"),
+    url("../public/assets/fonts/square721_bt_roman-webfont.woff2")
+      format("woff2"),
+    url("../public/assets/fonts/square721_bt_roman-webfont.woff") format("woff"),
+    url("../public/assets/fonts/square721_bt_roman-webfont.ttf")
+      format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  @include printVariables();
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  outline: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--bodyFontColor);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: var(--black) !important;
+  overflow-x: hidden;
+}
+#__next {
+  overflow-x: hidden;
+}
+
+.swal2-container{
+  .swal2-popup{
+    background: #000;
+    color: #00ffff;
+    border: 2px solid #fff; 
+    border-radius: 15px;
+
+    &.swal2-icon-error{
+      .swal2-html-container{
+        color: #f27474;
+      }
+    }
+
+    
+    
+  }
+}
+.swal2-actions{
+  .swal2-styled{
+    background: #000;
+    border: 2px solid #00ffff; 
+    color: #00ffff;
+    background-image: inherit !important;
+    min-width: 90px;
+    padding: 10px 20px;
+    &:hover{
+      background: #00ffff;
+      border-color: #00ffff;
+      color: #000;
+    }
+    &.swal2-deny{
+      background: #dc3741;
+      border-color: #dc3741;
+      color: #fff;
+      &:hover{
+        background: #000;
+        border-color: #000;
+        color: #fff;
+      }
+    }
+    &.swal2-cancel{
+      background-color: #6e7881;
+      border-color: #6e7881;
+      color: #fff;
+      &:hover{
+        background: #000;
+        border-color: #000;
+        color: #fff;
+      }
+    }
+  }
+}

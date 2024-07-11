@@ -1,0 +1,31 @@
+.button {
+  padding: 13px 22px;
+  border-radius: 50px;
+  background-color: var(--color329691);
+  border: 1px solid var(--color329691);
+  color: var(--white);
+  min-width: 100px;
+  :global(.MuiTypography-caption) {
+    color: var(--white);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.1;
+  }
+  &:hover{
+    background-color: var(--black);
+    border: 1px solid var(--black);
+  }
+}
+
+.buttonOutlined {
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: 1px solid var(--primaryBlue);
+  color: var(--primaryBlue);
+}
+
+.buttonText {
+  padding: 10px 20px;
+  border-radius: 50px;
+  color: var(--primaryBlue);
+}
