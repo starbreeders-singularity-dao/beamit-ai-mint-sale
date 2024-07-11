@@ -5,6 +5,7 @@ import { checkedSource } from "@/json/mock/checkedSource.mock";
 import { paymentMethodList } from "@/json/mock/paymentMethodList.mock";
 import Wrapper from "@/layout/wrapper/Wrapper";
 import {
+  checkWalletAddress,
   fetchLatestMintId,
   isAddressWhitelisted,
   register
@@ -99,74 +100,90 @@ export default function Home() {
       const isWhitelistedAddress: any =
         localStorage.getItem("whiteListAddress");
       const isWhitelisted = await isAddressWhitelisted(isWhitelistedAddress);
-      const errors = {
-        optionSelected: selectedSource === "",
-        pfpAddress: nftAddress === "",
-        sourceHolderAddress: holderAddress === "",
-        destinationWalletAddress: reciepientAddress === "",
-        paymentTxHash: paymentHash === ""
-      };
-
-      // setFormErrors(errors);
-      // if(formErrors)
-
-      if (
-        errors.pfpAddress ||
-        errors.sourceHolderAddress ||
-        errors.destinationWalletAddress ||
-        errors.paymentTxHash ||
-        errors.optionSelected
-      ) {
+      const  checkWalletAlreadyPresent = await checkWalletAddress(isWhitelistedAddress)
+      // console.log(checkWalletAlreadyPresent , isWhitelisted);
+      if(checkWalletAlreadyPresent) {
         Swal.fire({
           icon: "error",
-          title: "Validation Error",
-          text: "Please fill in all required fields.",
+          title: "Error",
+          text: "This wallet address is already registered.",
           confirmButtonText: "OK"
         });
-        return;
-      }
-
-      if (isWhitelisted) {
-        // let mintId = generateShortNumericCode(6)
-        // console.log(mintId);
-        const objData = {
-          nftAddress,
-          holderAddress,
-          reciepientAddress,
-          paymentHash,
-          isWhitelistedAddress,
-          selectedSource
-          // mintId
+        return false;
+      } 
+        const errors = {
+          optionSelected: selectedSource === "",
+          pfpAddress: nftAddress === "",
+          sourceHolderAddress: holderAddress === "",
+          destinationWalletAddress: reciepientAddress === "",
+          paymentTxHash: paymentHash === ""
         };
-        const isValidNFT = validateNftHash();
-        const isValidEth = isValidEthAddress(reciepientAddress);
-        const isValidPayment: any = isValidPaymentHash(paymentHash);
-
-        if (isValidNFT && isValidPayment && isValidEth) {
-          const create = await register(objData);
-
-          if (create) {
-            const mintedId = await fetchLatestMintId(isWhitelistedAddress);
-            setMintId(mintedId);
-
+  
+        // setFormErrors(errors);
+        // if(formErrors)
+  
+        if (
+          errors.pfpAddress ||
+          errors.sourceHolderAddress ||
+          errors.destinationWalletAddress ||
+          errors.paymentTxHash ||
+          errors.optionSelected
+        ) {
+          Swal.fire({
+            icon: "error",
+            title: "Validation Error",
+            text: "Please fill in all required fields.",
+            confirmButtonText: "OK"
+          });
+          return true ; 
+        }
+  
+        if (isWhitelisted) {
+          // let mintId = generateShortNumericCode(6)
+          // console.log(mintId);
+          const objData = {
+            nftAddress,
+            holderAddress,
+            reciepientAddress,
+            paymentHash,
+            isWhitelistedAddress,
+            selectedSource
+            // mintId
+          };
+          const isValidNFT = validateNftHash();
+          const isValidEth = isValidEthAddress(reciepientAddress);
+          const isValidPayment: any = isValidPaymentHash(paymentHash);
+  
+          if (isValidNFT && isValidPayment && isValidEth) {
+            const create = await register(objData);
+  
+            if (create) {
+              const mintedId = await fetchLatestMintId(isWhitelistedAddress);
+              setMintId(mintedId);
+  
+              Swal.fire({
+                icon: "success",
+                title: "Registration Successful",
+                text: "You have successfully registered.",
+                confirmButtonText: "OK"
+              });
+            }
+          } else {
             Swal.fire({
-              icon: "success",
-              title: "Registration Successful",
-              text: "You have successfully registered.",
+              icon: "error",
+              title: "Oops!",
+              text: "An error occurred while registering.",
               confirmButtonText: "OK"
             });
           }
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Oops!",
-            text: "An error occurred while registering.",
-            confirmButtonText: "OK"
-          });
         }
-      }
+     
+
+      return true
     } catch (error) {
-      // console.log(error, formErrors);
+      // console.log(error);
+
+      return false
     }
   };
 

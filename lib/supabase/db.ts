@@ -51,9 +51,9 @@ export const isAddressWhitelisted = async (address: string) => {
     const trimmedAddress = address.trim()
 
     const { data, error } = await supabase
-      .from("whitelists")
+      .from("alphamint")
       .select("id")
-      .eq("wallet_address", trimmedAddress);
+      .eq("whitelist_wallet", trimmedAddress);
       if (error) {
         false
       }
@@ -86,6 +86,12 @@ export const isAddressWhitelisted = async (address: string) => {
 //   return data?.length > 0;
 // };
 
+function getRandomInt() {
+  const min = Math.ceil(10);
+  const max = Math.floor( 100000);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 export async function register(objData: any): Promise<boolean> {
   try {
       const {
@@ -98,23 +104,16 @@ export async function register(objData: any): Promise<boolean> {
       } = objData;
 
         
-      const { data, error } = await supabase.from("nft_mints").insert([
-          // {
-          //     nft_address: nftAddress,
-          //     holder_address: holderAddress,
-          //     recipient_address: reciepientAddress,
-          //     payment_hash: paymentHash,
-          //     wallet_address: isWhitelistedAddress,
-          //     nft_type: selectedSource
-          // }
-          {
-            source_holder_wallet : holderAddress,
-            eth_dest_wallet : reciepientAddress,
-            source_nft : nftAddress,
-            payment01_hash:paymentHash,
-            whitelist_wallet : isWhitelistedAddress
-          }
-      ]);
+      const { data, error } = await supabase
+      .from('alphamint')
+      .update({
+        source_holder_wallet: holderAddress,
+        eth_dest_wallet: reciepientAddress,
+        source_nft: nftAddress,
+        payment01_hash: paymentHash,
+        mint_id: getRandomInt()
+      })
+      .eq('whitelist_wallet', isWhitelistedAddress); 
 
       if (data) true
 
@@ -134,7 +133,7 @@ export async function register(objData: any): Promise<boolean> {
 
 export async function fetchLatestMintId(walletAddress: string) {
   const { data, error } = await supabase
-      .from('nft_mints')
+      .from('alphamint')
       .select('mint_id')
       .eq('whitelist_wallet', walletAddress)
       .order('mint_id', { ascending: false }) // Ensure 'created_at' is a timestamp column
@@ -174,21 +173,27 @@ export async function fetchLatestMintId(walletAddress: string) {
 //   }
 // };
 
-export const  checkWalletAddress = async (address: string) => {
+export const checkWalletAddress = async (address: string): Promise<boolean> => {
   try {
-    const { data, error } = await supabase
-      .from("whitelists")
-      .select("id")
-      .eq("whitelist_wallet", address.toLowerCase());
 
-    if (error) {
-      // console.error("Error checking walletAddress:", error.message);
-      return false;
-    }
+ 
+    const data:any = await supabase
+      .from('alphamint')
+      .select('source_holder_wallet')
+      .eq('whitelist_wallet', address);
 
-    return data?.length > 0;
-  } catch (error :any) {
-    // console.error("Error checking walletAddress:", error.message);
+      const  source = data.data[0].source_holder_wallet
+
+      if (source){
+
+        return true 
+      }
+
+      return false 
+
+   
+  } catch (error: any) {
+    // console.error("Unexpected error checking wallet address:", error.message);
     return false;
   }
 };
