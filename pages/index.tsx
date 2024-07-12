@@ -59,29 +59,60 @@ export default function Home() {
     return isAddress(address);
   }
 
-  function isValidPaymentHash(hash: string): boolean {
-    const regex = /^0x([A-Fa-f0-9]{64})$/;
-    return regex.test(hash);
-  }
+  // function isValidPaymentHash(hash: string): boolean {
+  //   const regex = /^0x([A-Fa-f0-9]{64})$/;
+  //   return regex.test(hash);
+  // }
 
-  function validateNftHash(): boolean {
-    let regex: RegExp = /^[a-f0-9]{64}$/i;
-    switch (selectedSource) {
-      case "BTC Ordinal":
-        regex = /^[a-f0-9]{64}$/i;
-        break;
-      case "ETH NFT":
-        regex = /^0x[a-fA-F0-9]{40}$/;
-        break;
-      case "Solana NFT":
-        regex = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
-        break;
-      default:
+  // function isValidBTCAddress(address: string): boolean {
+  //   const regex =  /^(1[a-zA-HJ-NP-Z0-9]{25,34}|3[a-zA-HJ-NP-Z0-9]{25,34}|bc1[0-9a-z]{6,}\w{2,})$/i;
+  //   return regex.test(address);
+  // }
+  // function isValidSolanaAddress(address: string): boolean {
+  //   const regex = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
+  //   return regex.test(address);
+  // }
+
+  function validateHolderAddress(selectedSource: any): boolean {
+    try {
+      if (selectedSource === "BTC Ordinal") {
+        return true 
+        // return isValidBTCAddress(holderAddress);
+        // return true;
+      } else if (selectedSource === "ETH NFT") {
+        return true 
+        // return isValidEthAddress(holderAddress);
+      } else if (selectedSource === "Solana NFT") {
+        return true 
+        // return isValidSolanaAddress(holderAddress);
+      } else {
         return false;
+      }
+    } catch (error: any) {
+      // console.log(error);
+      return false;
     }
-
-    return regex.test(nftAddress);
   }
+
+  // function validateNftHash(): boolean {
+  //   let regex: RegExp = /^/i;
+  //   switch (selectedSource) {
+  //     case "BTC Ordinal":
+  //       // regex = /^(1[a-km-zA-HJ-NP-Z1-9]{25,34}|3[a-km-zA-HJ-NP-Z1-9]{25,34}|bc1[0-9a-z]{1,8}[qpzry9x8gf2tvdw0s3jn54khce6mua7l]{38,87})$/i;;
+  //       // break;
+  //       return true 
+  //     case "ETH NFT":
+  //       regex = /^0x[a-fA-F0-9]{40}$/;
+  //       break;
+  //     case "Solana NFT":
+  //       regex = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
+  //       break;
+  //     default:
+  //       return false;
+  //   }
+
+  //   return regex.test(nftAddress);
+  // }
 
   const handleLogout = () => {
     try {
@@ -100,9 +131,11 @@ export default function Home() {
       const isWhitelistedAddress: any =
         localStorage.getItem("whiteListAddress");
       const isWhitelisted = await isAddressWhitelisted(isWhitelistedAddress);
-      const  checkWalletAlreadyPresent = await checkWalletAddress(isWhitelistedAddress)
+      const checkWalletAlreadyPresent = await checkWalletAddress(
+        isWhitelistedAddress
+      );
       // console.log(checkWalletAlreadyPresent , isWhitelisted);
-      if(checkWalletAlreadyPresent) {
+      if (checkWalletAlreadyPresent) {
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -110,131 +143,157 @@ export default function Home() {
           confirmButtonText: "OK"
         });
         return false;
-      } 
-        const errors = {
-          optionSelected: selectedSource === "",
-          pfpAddress: nftAddress === "",
-          sourceHolderAddress: holderAddress === "",
-          destinationWalletAddress: reciepientAddress === "",
-          paymentTxHash: paymentHash === ""
+      }
+      const errors = {
+        optionSelected: selectedSource === "",
+        pfpAddress: nftAddress === "",
+        sourceHolderAddress: holderAddress === "",
+        destinationWalletAddress: reciepientAddress === "",
+        paymentTxHash: paymentHash === ""
+      };
+
+      // setFormErrors(errors);
+      // if(formErrors)
+
+      if (
+        errors.pfpAddress ||
+        errors.sourceHolderAddress ||
+        errors.destinationWalletAddress ||
+        errors.paymentTxHash ||
+        errors.optionSelected
+      ) {
+        Swal.fire({
+          icon: "error",
+          title: "Validation Error",
+          text: "Please fill in all required fields.",
+          confirmButtonText: "OK"
+        });
+        return true;
+      }
+
+      if (isWhitelisted) {
+        // let mintId = generateShortNumericCode(6)
+        // console.log(mintId);
+        const objData = {
+          nftAddress,
+          holderAddress,
+          reciepientAddress,
+          paymentHash,
+          isWhitelistedAddress,
+          selectedSource
+          // mintId
         };
-  
-        // setFormErrors(errors);
-        // if(formErrors)
-  
-        if (
-          errors.pfpAddress ||
-          errors.sourceHolderAddress ||
-          errors.destinationWalletAddress ||
-          errors.paymentTxHash ||
-          errors.optionSelected
-        ) {
-          Swal.fire({
-            icon: "error",
-            title: "Validation Error",
-            text: "Please fill in all required fields.",
-            confirmButtonText: "OK"
-          });
-          return true ; 
-        }
-  
-        if (isWhitelisted) {
-          // let mintId = generateShortNumericCode(6)
-          // console.log(mintId);
-          const objData = {
-            nftAddress,
-            holderAddress,
-            reciepientAddress,
-            paymentHash,
-            isWhitelistedAddress,
-            selectedSource
-            // mintId
-          };
-          const isValidNFT = validateNftHash();
-          const isValidEth = isValidEthAddress(reciepientAddress);
-          const isValidPayment: any = isValidPaymentHash(paymentHash);
-  
-          if (isValidNFT && isValidPayment && isValidEth) {
-            const create = await register(objData);
-  
-            if (create) {
-              const mintedId = await fetchLatestMintId(isWhitelistedAddress);
-              setMintId(mintedId);
-  
-              Swal.fire({
-                icon: "success",
-                title: "Registration Successful",
-                text: "You have successfully registered.",
-                confirmButtonText: "OK"
-              });
-            }
-          } else {
+
+        // const isValidNFT = validateNftHash();
+
+        const isValidHolderAddress = validateHolderAddress(selectedSource);
+        // const isValidEth = isValidEthAddress(reciepientAddress);
+        // const isValidPayment: any = isValidPaymentHash(paymentHash);
+        // console.log("ethAddress", isValidNFT, isValidHolderAddress);
+        // if (isValidNFT && isValidHolderAddress) {
+          if ( isValidHolderAddress) {
+
+          const create = await register(objData);
+
+          if (create) {
+            const mintedId = await fetchLatestMintId(isWhitelistedAddress);
+            setMintId(mintedId);
+
             Swal.fire({
-              icon: "error",
-              title: "Oops!",
-              text: "An error occurred while registering.",
+              icon: "success",
+              title: "Registration Successful",
+              text: "You have successfully registered.",
               confirmButtonText: "OK"
             });
           }
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops!",
+            text: "An error occurred while registering.",
+            confirmButtonText: "OK"
+          });
         }
-     
+      }
 
-      return true
+      return true;
     } catch (error) {
       // console.log(error);
 
-      return false
+      return false;
     }
   };
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (nftAddress) {
-        if (!selectedSource) {
-          Swal.fire({
-            icon: "error",
-            title: "Select NFT Options",
-            text: "Invalid NFT Options",
-            confirmButtonText: "OK"
-          });
-        }
-        if (selectedSource) {
-          const isValidNFT = validateNftHash();
+  // useEffect(() => {
+  //   const timeoutId = setTimeout(() => {
+  //     if (nftAddress) {
+  //       if (!selectedSource) {
+  //         Swal.fire({
+  //           icon: "error",
+  //           title: "Select NFT Options",
+  //           text: "Invalid NFT Options",
+  //           confirmButtonText: "OK"
+  //         });
+  //       }
+  //       if (selectedSource) {
+  //         const isValidNFT = validateNftHash();
 
-          if (!isValidNFT) {
-            Swal.fire({
-              icon: "error",
-              title: "Validation Error",
-              text: "Invalid NFT Address",
-              confirmButtonText: "OK"
-            });
-          }
-        }
-      }
-    }, 1000);
-    return () => clearTimeout(timeoutId);
-  }, [nftAddress]);
+  //         if (!isValidNFT) {
+  //           Swal.fire({
+  //             icon: "error",
+  //             title: "Validation Error",
+  //             text: "Invalid NFT Address",
+  //             confirmButtonText: "OK"
+  //           });
+  //         }
+  //       }
+  //     }
+  //   }, 1000);
+  //   return () => clearTimeout(timeoutId);
+  // }, [nftAddress]);
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (holderAddress) {
-        const isValidEth = isValidEthAddress(holderAddress);
-        if (!isValidEth) {
-          Swal.fire({
-            icon: "error",
-            title: "Validation Error",
-            text: "Invalid Ethereum Address",
-            confirmButtonText: "OK"
-          });
-        }
-      }
-    }, 500);
-    return () => clearTimeout(timeoutId);
-  }, [holderAddress]);
+  // useEffect(() => {
+
+  //   const timeoutId = setTimeout(() => {
+  
+  //     if (holderAddress) {
+  //       if (!selectedSource) {
+  //         Swal.fire({
+  //           icon: "error",
+  //           title: "Select Options",
+  //           text: "Invalid Options",
+  //           confirmButtonText: "OK"
+  //         });
+  //       }else{
+  //         const isValidHolder = validateHolderAddress(selectedSource);
+  //         // console.log(isValidHolder);
+  //         if (!isValidHolder) {
+   
+  //           Swal.fire({
+  //             icon: "error",
+  //             title: "Validation Error",
+  //             text: `Invalid ${selectedSource} Holder Address`,
+  //             confirmButtonText: "OK"
+  //           });
+  //         }
+  //       }
+        
+  //     }
+  //   }, 500);
+  //   return () => clearTimeout(timeoutId);
+  // }, [holderAddress]);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (reciepientAddress) {
+        if (!selectedSource) {
+          Swal.fire({
+            icon: "error",
+            title: "Select  Options",
+            text: "Invalid  Options",
+            confirmButtonText: "OK"
+          });
+        }
         const isValidEth = isValidEthAddress(reciepientAddress);
         if (!isValidEth) {
           Swal.fire({
@@ -249,22 +308,22 @@ export default function Home() {
     return () => clearTimeout(timeoutId);
   }, [reciepientAddress]);
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (paymentHash) {
-        const isValidTxHash = isValidPaymentHash(paymentHash);
-        if (!isValidTxHash) {
-          Swal.fire({
-            icon: "error",
-            title: "Validation Error",
-            text: "Invalid Ethereum Transaction Hash",
-            confirmButtonText: "OK"
-          });
-        }
-      }
-    }, 500);
-    return () => clearTimeout(timeoutId);
-  }, [paymentHash]);
+  // useEffect(() => {
+  //   const timeoutId = setTimeout(() => {
+  //     if (paymentHash) {
+  //       const isValidTxHash = isValidPaymentHash(paymentHash);
+  //       if (!isValidTxHash) {
+  //         Swal.fire({
+  //           icon: "error",
+  //           title: "Validation Error",
+  //           text: "Invalid Ethereum Transaction Hash",
+  //           confirmButtonText: "OK"
+  //         });
+  //       }
+  //     }
+  //   }, 500);
+  //   return () => clearTimeout(timeoutId);
+  // }, [paymentHash]);
 
   const [openStepModal, setopenStepModal] = useState(false);
 
@@ -275,19 +334,7 @@ export default function Home() {
     setopenStepModal(false);
   };
 
-  // const fetchMintId = async () => {
-  //   try {
-  //     const mintId = await fetchLatestMintId(whitelistedAddress);
-  //     return mintId;
-  //   } catch (error) {
-  //     // console.log(error);
-  //   }
-  // };
 
-  //   useEffect(() => {
-  //      fetchMintId()
-  //   },[whitelistedAddress]
-  // )
 
   return (
     <ProtectedRoute>
@@ -454,36 +501,31 @@ export default function Home() {
 
                   <Grid item xs={12} sx={{ textAlign: "center" }}>
                     <List className="submitBtnLtt">
-                       <ListItem>
-                          <CustomButtonPrimary
-                            type="button"
-                            variant="contained"
-                            color="primary"
-                            className="customBtnCn"
-                            onClick={handleSubmit}
-                          >
-                            Submit
-                          </CustomButtonPrimary>
-                       </ListItem>
+                      <ListItem>
+                        <CustomButtonPrimary
+                          type="button"
+                          variant="contained"
+                          color="primary"
+                          className="customBtnCn"
+                          onClick={handleSubmit}
+                        >
+                          Submit
+                        </CustomButtonPrimary>
+                      </ListItem>
 
-                       <ListItem>
-                          <CustomButtonPrimary
-                            type="button"
-                            variant="contained"
-                            color="primary"
-                            className="customBtnCn"
-                            onClick={handleLogout}
-                          >
-                            Logout
-                          </CustomButtonPrimary>
-                       </ListItem>
+                      <ListItem>
+                        <CustomButtonPrimary
+                          type="button"
+                          variant="contained"
+                          color="primary"
+                          className="customBtnCn"
+                          onClick={handleLogout}
+                        >
+                          Logout
+                        </CustomButtonPrimary>
+                      </ListItem>
                     </List>
-                    
-
-                    
                   </Grid>
-
-
                 </Grid>
               </Box>
             </Container>
