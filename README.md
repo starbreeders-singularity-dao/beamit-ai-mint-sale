@@ -12,4 +12,4 @@
 # Example project
 1. Heap up
 2. compsheet
-... .
+
