@@ -42,9 +42,6 @@ export default function Home() {
   const [selectedSource, setSelectedSource] = useState("");
 
   const [mintId, setMintId] = useState("");
-  const [nftAddress2, setNftAddress2] = useState("");
-const [nftAddress3, setNftAddress3] = useState("");
-
 
   // const [formErrors, setFormErrors] = useState({
   //   pfpAddress: false,
@@ -131,10 +128,13 @@ const [nftAddress3, setNftAddress3] = useState("");
 
   const handleSubmit = async () => {
     try {
-      const isWhitelistedAddress = localStorage.getItem("whiteListAddress");
+      const isWhitelistedAddress: any =
+        localStorage.getItem("whiteListAddress");
       const isWhitelisted = await isAddressWhitelisted(isWhitelistedAddress);
-      const checkWalletAlreadyPresent = await checkWalletAddress(isWhitelistedAddress);
-  
+      const checkWalletAlreadyPresent = await checkWalletAddress(
+        isWhitelistedAddress
+      );
+      // console.log(checkWalletAlreadyPresent , isWhitelisted);
       if (checkWalletAlreadyPresent) {
         Swal.fire({
           icon: "error",
@@ -144,7 +144,6 @@ const [nftAddress3, setNftAddress3] = useState("");
         });
         return false;
       }
-  
       const errors = {
         optionSelected: selectedSource === "",
         pfpAddress: nftAddress === "",
@@ -152,7 +151,10 @@ const [nftAddress3, setNftAddress3] = useState("");
         destinationWalletAddress: reciepientAddress === "",
         paymentTxHash: paymentHash === ""
       };
-  
+
+      // setFormErrors(errors);
+      // if(formErrors)
+
       if (
         errors.pfpAddress ||
         errors.sourceHolderAddress ||
@@ -168,27 +170,35 @@ const [nftAddress3, setNftAddress3] = useState("");
         });
         return true;
       }
-  
+
       if (isWhitelisted) {
+        // let mintId = generateShortNumericCode(6)
+        // console.log(mintId);
         const objData = {
           nftAddress,
           holderAddress,
           reciepientAddress,
           paymentHash,
           isWhitelistedAddress,
-          selectedSource,
-          nftAddress2,  // Add this line
-          nftAddress3   // Add this line
+          selectedSource
+          // mintId
         };
-  
+
+        // const isValidNFT = validateNftHash();
+
         const isValidHolderAddress = validateHolderAddress(selectedSource);
-        if (isValidHolderAddress) {
+        // const isValidEth = isValidEthAddress(reciepientAddress);
+        // const isValidPayment: any = isValidPaymentHash(paymentHash);
+        // console.log("ethAddress", isValidNFT, isValidHolderAddress);
+        // if (isValidNFT && isValidHolderAddress) {
+          if ( isValidHolderAddress) {
+
           const create = await register(objData);
-  
+
           if (create) {
             const mintedId = await fetchLatestMintId(isWhitelistedAddress);
             setMintId(mintedId);
-  
+
             Swal.fire({
               icon: "success",
               title: "Registration Successful",
@@ -205,13 +215,14 @@ const [nftAddress3, setNftAddress3] = useState("");
           });
         }
       }
-  
+
       return true;
     } catch (error) {
+      // console.log(error);
+
       return false;
     }
   };
-  
 
   // useEffect(() => {
   //   const timeoutId = setTimeout(() => {
@@ -372,36 +383,6 @@ const [nftAddress3, setNftAddress3] = useState("");
                       />
                     </Box>
                   </Grid>
-
-                  <Grid item xs={12}>
-  <Box className="inputfldInner">
-    <Typography variant="h5" className="inputLabel">
-      2nd Source PFP NFT Address/ Ordinals Inscription ID
-    </Typography>
-    <InputFieldCommon
-      type="text"
-      value={nftAddress2}
-      onChange={(e) => {
-        setNftAddress2(e.target.value);
-      }}
-    />
-  </Box>
-</Grid>
-
-<Grid item xs={12}>
-  <Box className="inputfldInner">
-    <Typography variant="h5" className="inputLabel">
-      3rd Source PFP NFT Address/ Ordinals Inscription ID
-    </Typography>
-    <InputFieldCommon
-      type="text"
-      value={nftAddress3}
-      onChange={(e) => {
-        setNftAddress3(e.target.value);
-      }}
-    />
-  </Box>
-</Grid>
 
                   <Grid item xs={12}>
                     <Box className="inputfldInner">
