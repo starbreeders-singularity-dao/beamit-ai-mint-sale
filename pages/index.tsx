@@ -42,6 +42,9 @@ export default function Home() {
   const [selectedSource, setSelectedSource] = useState("");
 
   const [mintId, setMintId] = useState("");
+  const [nftAddress2, setNftAddress2] = useState("");
+const [nftAddress3, setNftAddress3] = useState("");
+
 
   // const [formErrors, setFormErrors] = useState({
   //   pfpAddress: false,
@@ -128,13 +131,10 @@ export default function Home() {
 
   const handleSubmit = async () => {
     try {
-      const isWhitelistedAddress: any =
-        localStorage.getItem("whiteListAddress");
+      const isWhitelistedAddress = localStorage.getItem("whiteListAddress");
       const isWhitelisted = await isAddressWhitelisted(isWhitelistedAddress);
-      const checkWalletAlreadyPresent = await checkWalletAddress(
-        isWhitelistedAddress
-      );
-      // console.log(checkWalletAlreadyPresent , isWhitelisted);
+      const checkWalletAlreadyPresent = await checkWalletAddress(isWhitelistedAddress);
+  
       if (checkWalletAlreadyPresent) {
         Swal.fire({
           icon: "error",
@@ -144,6 +144,7 @@ export default function Home() {
         });
         return false;
       }
+  
       const errors = {
         optionSelected: selectedSource === "",
         pfpAddress: nftAddress === "",
@@ -151,10 +152,7 @@ export default function Home() {
         destinationWalletAddress: reciepientAddress === "",
         paymentTxHash: paymentHash === ""
       };
-
-      // setFormErrors(errors);
-      // if(formErrors)
-
+  
       if (
         errors.pfpAddress ||
         errors.sourceHolderAddress ||
@@ -170,35 +168,27 @@ export default function Home() {
         });
         return true;
       }
-
+  
       if (isWhitelisted) {
-        // let mintId = generateShortNumericCode(6)
-        // console.log(mintId);
         const objData = {
           nftAddress,
           holderAddress,
           reciepientAddress,
           paymentHash,
           isWhitelistedAddress,
-          selectedSource
-          // mintId
+          selectedSource,
+          nftAddress2,  // Add this line
+          nftAddress3   // Add this line
         };
-
-        // const isValidNFT = validateNftHash();
-
+  
         const isValidHolderAddress = validateHolderAddress(selectedSource);
-        // const isValidEth = isValidEthAddress(reciepientAddress);
-        // const isValidPayment: any = isValidPaymentHash(paymentHash);
-        // console.log("ethAddress", isValidNFT, isValidHolderAddress);
-        // if (isValidNFT && isValidHolderAddress) {
-          if ( isValidHolderAddress) {
-
+        if (isValidHolderAddress) {
           const create = await register(objData);
-
+  
           if (create) {
             const mintedId = await fetchLatestMintId(isWhitelistedAddress);
             setMintId(mintedId);
-
+  
             Swal.fire({
               icon: "success",
               title: "Registration Successful",
@@ -215,14 +205,13 @@ export default function Home() {
           });
         }
       }
-
+  
       return true;
     } catch (error) {
-      // console.log(error);
-
       return false;
     }
   };
+  
 
   // useEffect(() => {
   //   const timeoutId = setTimeout(() => {
@@ -383,6 +372,36 @@ export default function Home() {
                       />
                     </Box>
                   </Grid>
+
+                  <Grid item xs={12}>
+  <Box className="inputfldInner">
+    <Typography variant="h5" className="inputLabel">
+      2nd Source PFP NFT Address/ Ordinals Inscription ID
+    </Typography>
+    <InputFieldCommon
+      type="text"
+      value={nftAddress2}
+      onChange={(e) => {
+        setNftAddress2(e.target.value);
+      }}
+    />
+  </Box>
+</Grid>
+
+<Grid item xs={12}>
+  <Box className="inputfldInner">
+    <Typography variant="h5" className="inputLabel">
+      3rd Source PFP NFT Address/ Ordinals Inscription ID
+    </Typography>
+    <InputFieldCommon
+      type="text"
+      value={nftAddress3}
+      onChange={(e) => {
+        setNftAddress3(e.target.value);
+      }}
+    />
+  </Box>
+</Grid>
 
                   <Grid item xs={12}>
                     <Box className="inputfldInner">
