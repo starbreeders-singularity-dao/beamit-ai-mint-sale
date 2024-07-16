@@ -42,6 +42,8 @@ export default function Home() {
   const [selectedSource, setSelectedSource] = useState("");
 
   const [mintId, setMintId] = useState("");
+const [nftAddress2, setNftAddress2] = useState("");
+const [nftAddress3, setNftAddress3] = useState("");
 
   // const [formErrors, setFormErrors] = useState({
   //   pfpAddress: false,
