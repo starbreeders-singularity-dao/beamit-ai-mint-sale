@@ -384,6 +384,38 @@ export default function Home() {
                     </Box>
                   </Grid>
 
+<Grid item xs={12}>
+  <Box className="inputfldInner">
+    <Typography variant="h5" className="inputLabel">
+      2nd Source PFP NFT Address/ Ordinals Inscription ID
+    </Typography>
+    <InputFieldCommon
+      type="text"
+      value={nftAddress2}
+      onChange={(e) => {
+        setNftAddress2(e.target.value);
+      }}
+    />
+  </Box>
+</Grid>
+
+<Grid item xs={12}>
+  <Box className="inputfldInner">
+    <Typography variant="h5" className="inputLabel">
+      3rd Source PFP NFT Address/ Ordinals Inscription ID
+    </Typography>
+    <InputFieldCommon
+      type="text"
+      value={nftAddress3}
+      onChange={(e) => {
+        setNftAddress3(e.target.value);
+      }}
+    />
+  </Box>
+</Grid>
+
+                  
+
                   <Grid item xs={12}>
                     <Box className="inputfldInner">
                       <Typography variant="h5" className="inputLabel">
