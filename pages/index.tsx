@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 import CommonRadio from "@/components/CommonChecked/CommonRadio";
 import assest from "@/json/assest";
 import { checkedSource } from "@/json/mock/checkedSource.mock";
@@ -7,7 +6,7 @@ import {
   checkWalletAddress,
   fetchLatestMintId,
   isAddressWhitelisted,
-  register
+  register,
 } from "@/lib/supabase/db";
 import { HomePageStyled } from "@/styles/StyledComponents/HomePageStyled";
 import InputFieldCommon from "@/ui/CommonInput/CommonInput";
@@ -86,9 +85,9 @@ export default function Home() {
       multiplier = 2;
     }
 
-    const updatedList = initialPaymentMethodList.map(item => ({
+    const updatedList = initialPaymentMethodList.map((item) => ({
       ...item,
-      price: (parseFloat(item.price) * multiplier).toFixed(5)
+      price: (parseFloat(item.price) * multiplier).toFixed(5),
     }));
 
     setPaymentMethodList(updatedList);
@@ -113,7 +112,7 @@ export default function Home() {
           icon: "error",
           title: "Error",
           text: "This wallet address is already registered.",
-          confirmButtonText: "OK"
+          confirmButtonText: "OK",
         });
         return false;
       }
@@ -123,7 +122,7 @@ export default function Home() {
         pfpAddress: nftAddress === "",
         sourceHolderAddress: holderAddress === "",
         destinationWalletAddress: recipientAddress === "",
-        paymentTxHash: paymentHash === ""
+        paymentTxHash: paymentHash === "",
       };
 
       if (
@@ -137,7 +136,7 @@ export default function Home() {
           icon: "error",
           title: "Validation Error",
           text: "Please fill in all required fields.",
-          confirmButtonText: "OK"
+          confirmButtonText: "OK",
         });
         return true;
       }
@@ -151,7 +150,7 @@ export default function Home() {
           isWhitelistedAddress,
           selectedSource,
           nftAddress2,
-          nftAddress3
+          nftAddress3,
         };
 
         const isValidHolderAddress = validateHolderAddress(selectedSource);
@@ -166,14 +165,14 @@ export default function Home() {
               icon: "success",
               title: "Registration Successful",
               text: "You have successfully registered.",
-              confirmButtonText: "OK"
+              confirmButtonText: "OK",
             });
           } else {
             Swal.fire({
               icon: "error",
               title: "Oops!",
               text: "An error occurred while registering.",
-              confirmButtonText: "OK"
+              confirmButtonText: "OK",
             });
           }
         }
@@ -193,7 +192,7 @@ export default function Home() {
             icon: "error",
             title: "Select Options",
             text: "Invalid Options",
-            confirmButtonText: "OK"
+            confirmButtonText: "OK",
           });
         }
         const isValidEth = isValidEthAddress(recipientAddress);
@@ -202,7 +201,7 @@ export default function Home() {
             icon: "error",
             title: "Validation Error",
             text: "Invalid Ethereum Address",
-            confirmButtonText: "OK"
+            confirmButtonText: "OK",
           });
         }
       }
@@ -243,36 +242,12 @@ export default function Home() {
                 </Box>
               </Box>
 
-              <Box id="box1" className="floating-box">
-                <Typography>
-                  Welcome to the Beamit AI Alphamint. First choose the location chain of the PFP you want to generate a 3D avatar from.
-                </Typography>
-              </Box>
-              <Box id="arrow1" className="arrow"></Box>
-
-              <Box id="box2" className="floating-box">
-                <Typography>
-                  Now post your PFP NFTs/Ordinals ID here. Ordinals: Inscription number. ETH/SOL NFT: NFT Address. Choose up to 3 PFP to mint 3D Avatars!
-                </Typography>
-              </Box>
-              <Box id="arrow2" className="arrow"></Box>
-
-              <Box id="box3" className="floating-box">
-                <Typography>
-                  Now post the Wallet address, where your ordinals are stored in.
-                </Typography>
-              </Box>
-              <Box id="arrow3" className="arrow"></Box>
-
-              <Box id="box4" className="floating-box">
-                <Typography>
-                  Next, paste the Ethereum wallet. This is where we will send your 3D Avatar.
-                </Typography>
-              </Box>
-              <Box id="arrow4" className="arrow"></Box>
-
               <Box className="homeSourceWrapBtm">
-                <Grid container rowSpacing={{ xs: 2, sm: 3, md: 4 }} columnSpacing={{ xs: 1, sm: 2 }}>
+                <Grid
+                  container
+                  rowSpacing={{ xs: 2, sm: 3, md: 4 }}
+                  columnSpacing={{ xs: 1, sm: 2 }}
+                >
                   <Grid item xs={12}>
                     <Box className="inputfldInner">
                       <Typography variant="h5" className="inputLabel">
@@ -286,6 +261,14 @@ export default function Home() {
                         }}
                       />
                     </Box>
+                    <div className="floating-box" id="box1">
+                      <p>
+                        Ordinals: Inscription number <br />
+                        ETH/SOL NFT: NFT Address <br />
+                        Choose up to 3 PFP to mint 3D Avatars!
+                      </p>
+                      <div className="arrow" id="arrow1"></div>
+                    </div>
                   </Grid>
 
                   <Grid item xs={12}>
@@ -301,6 +284,14 @@ export default function Home() {
                         }}
                       />
                     </Box>
+                    <div className="floating-box" id="box2">
+                      <p>
+                        Ordinals: Inscription number <br />
+                        ETH/SOL NFT: NFT Address <br />
+                        Choose up to 3 PFP to mint 3D Avatars!
+                      </p>
+                      <div className="arrow" id="arrow2"></div>
+                    </div>
                   </Grid>
 
                   <Grid item xs={12}>
@@ -316,6 +307,14 @@ export default function Home() {
                         }}
                       />
                     </Box>
+                    <div className="floating-box" id="box3">
+                      <p>
+                        Ordinals: Inscription number <br />
+                        ETH/SOL NFT: NFT Address <br />
+                        Choose up to 3 PFP to mint 3D Avatars!
+                      </p>
+                      <div className="arrow" id="arrow3"></div>
+                    </div>
                   </Grid>
 
                   <Grid item xs={12}>
@@ -331,6 +330,12 @@ export default function Home() {
                         }}
                       />
                     </Box>
+                    <div className="floating-box" id="box4">
+                      <p>
+                        Now post the Wallet address, where your ordinals are stored in.
+                      </p>
+                      <div className="arrow" id="arrow4"></div>
+                    </div>
                   </Grid>
 
                   <Grid item xs={12}>
@@ -353,8 +358,12 @@ export default function Home() {
                       <Box className="txtInnerCmdl">
                         <Typography variant="body1">
                           Congratulations for attending the Beamit AI Alphamint!
-                          Given your payment and information was entered correctly, your 3D Avatar will be mintable within 10 days on{" "}
-                          <Link href="http://alphamint.beamit.space.">http://alphamint.beamit.space.</Link>
+                          Given your payment and information was entered
+                          correctly, your 3D Avatar will be mintable within 10
+                          days on{" "}
+                          <Link href="http://alphamint.beamit.space.">
+                            http://alphamint.beamit.space.
+                          </Link>
                         </Typography>
                         <Typography variant="body1">
                           Please check our discord for updates. Your mint ID is{" "}
@@ -367,13 +376,14 @@ export default function Home() {
                   )}
 
                   {!mintId &&
-                  nftAddress.length > 0 &&
-                  holderAddress.length > 0 &&
-                  recipientAddress.length > 0 ? (
+                    nftAddress.length > 0 &&
+                    holderAddress.length > 0 &&
+                    recipientAddress.length > 0 ? (
                     <Grid item xs={12}>
                       <Box className="paymentAdress">
                         <Typography variant="h5" className="hdPymnt">
-                          Make your payment (payment must be made from source holder Wallet Address):
+                          Make your payment (payment must be made from source
+                          holder Wallet Address):
                         </Typography>
 
                         <Box className="paymentAdressTable">
@@ -383,15 +393,23 @@ export default function Home() {
                                 <TableRow key={index}>
                                   <TableCell component="td" scope="row">
                                     <Box className="paymentInfoInner">
-                                      <Box className="coinName">{item?.name}</Box>
-                                      <Box className="coinPrice">{item?.price}</Box>
-                                      <Box className="coinValue">{item?.value}</Box>
+                                      <Box className="coinName">
+                                        {item?.name}
+                                      </Box>
+                                      <Box className="coinPrice">
+                                        {item?.price}
+                                      </Box>
+                                      <Box className="coinValue">
+                                        {item?.value}
+                                      </Box>
                                     </Box>
                                   </TableCell>
 
                                   <TableCell component="td" scope="row">
                                     <Box className="walletAdrss">
-                                      <Typography variant="body1">{item?.wallet}</Typography>
+                                      <Typography variant="body1">
+                                        {item?.wallet}
+                                      </Typography>
                                     </Box>
                                   </TableCell>
                                 </TableRow>
@@ -454,11 +472,19 @@ export default function Home() {
         </HomePageStyled>
       </Wrapper>
 
-      <MuiModalWrapper open={openStepModal} onClose={handleStepModalClose} title="">
+      <MuiModalWrapper
+        open={openStepModal}
+        onClose={handleStepModalClose}
+        title=""
+      >
         <Box className="modalStepOutrSc">
           <Typography variant="body1">
-            Congratulations for attending the Beamit AI Alphamint! Given your payment and information was entered correctly, your 3D Avatar will be mintable within 10 days on{" "}
-            <Link href="http://alphamint.beamit.space.">http://alphamint.beamit.space.</Link>
+            Congratulations for attending the Beamit AI Alphamint! Given your
+            payment and information was entered correctly, your 3D Avatar will
+            be mintable within 10 days on{" "}
+            <Link href="http://alphamint.beamit.space.">
+              http://alphamint.beamit.space.
+            </Link>
           </Typography>
           <Typography variant="body1">
             Please check our discord for updates. Your mint ID is{" "}
