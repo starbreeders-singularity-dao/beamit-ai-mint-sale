@@ -84,7 +84,7 @@ export async function register(objData: AlphamintData): Promise<boolean> {
       return false;
     }
 
-    if (!data || data.length === 0) {
+    if (!data || (data as any[]).length === 0) {
       return false;
     }
 
