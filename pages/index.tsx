@@ -267,7 +267,7 @@ export default function Home() {
                         ETH/SOL NFT: NFT Address <br />
                         Choose up to 3 PFP to mint 3D Avatars!
                       </p>
-                      <div className="arrow" id="arrow1"></div>
+                     <div className="arrow" id="arrow1" />
                     </div>
                   </Grid>
 
@@ -290,7 +290,7 @@ export default function Home() {
                         ETH/SOL NFT: NFT Address <br />
                         Choose up to 3 PFP to mint 3D Avatars!
                       </p>
-                      <div className="arrow" id="arrow2"></div>
+                      <div className="arrow" id="arrow2" />
                     </div>
                   </Grid>
 
@@ -313,7 +313,7 @@ export default function Home() {
                         ETH/SOL NFT: NFT Address <br />
                         Choose up to 3 PFP to mint 3D Avatars!
                       </p>
-                      <div className="arrow" id="arrow3"></div>
+                      <div className="arrow" id="arrow3" />
                     </div>
                   </Grid>
 
@@ -334,7 +334,7 @@ export default function Home() {
                       <p>
                         Now post the Wallet address, where your ordinals are stored in.
                       </p>
-                      <div className="arrow" id="arrow4"></div>
+                   <div className="arrow" id="arrow4" />
                     </div>
                   </Grid>
 
