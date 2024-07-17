@@ -79,15 +79,19 @@ export async function register(objData: any): Promise<boolean> {
       .eq('whitelist_wallet', isWhitelistedAddress);
 
     if (error) {
-      console.error("Error registering user:", error.message);
+      // Handle error appropriately
       return false;
     }
 
-    console.log("User registered successfully:", data);  // Log the data to use the variable
+    if (data && data.length === 0) {
+      // Handle case where update did not affect any rows
+      return false;
+    }
+
     return true;
   } catch (error: any) {
-    console.error("Error registering user:", error.message);
-    return false; // Handle any unexpected errors and return false
+    // Handle any unexpected errors and return false
+    return false;
   }
 }
 
