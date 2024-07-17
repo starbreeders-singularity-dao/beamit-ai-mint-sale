@@ -231,7 +231,7 @@ export default function Home() {
                     {checkedSource.map((item) => (
                       <CommonRadio
                         name="source"
-                        key={item?.id} // Assuming `id` is a unique identifier in `item`
+                        key={item?.name} // Using `name` as the unique key
                         label={item?.name}
                         value={item?.value}
                         checked={selectedSource === item?.value}
@@ -390,7 +390,7 @@ export default function Home() {
                           <Table>
                             <TableBody>
                               {paymentMethodList.map((item) => (
-                                <TableRow key={item?.id}> {/* Assuming `id` is a unique identifier in `item` */}
+                               <TableRow key={item?.name}> {/* Using `name` as the unique key */}
                                   <TableCell component="td" scope="row">
                                     <Box className="paymentInfoInner">
                                       <Box className="coinName">
