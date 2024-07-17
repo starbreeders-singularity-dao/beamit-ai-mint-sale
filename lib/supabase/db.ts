@@ -33,7 +33,7 @@ export const isAddressWhitelisted = async (address: string) => {
   try {
     const trimmedAddress = address.trim();
     const { data, error } = await supabase
-      .from<AlphamintData, AlphamintData>("alphamint")
+      .from("alphamint")
       .select("id")
       .eq("whitelist_wallet", trimmedAddress);
 
@@ -70,7 +70,7 @@ export async function register(objData: AlphamintData): Promise<boolean> {
     } = objData;
 
     const { data, error } = await supabase
-      .from<AlphamintData, AlphamintData>('alphamint')
+      .from('alphamint')
       .update({
         source_holder_wallet: holderAddress,
         eth_dest_wallet: recipientAddress,
@@ -99,7 +99,7 @@ export async function register(objData: AlphamintData): Promise<boolean> {
 export async function fetchLatestMintId(walletAddress: string) {
   try {
     const { data, error } = await supabase
-      .from<AlphamintData, AlphamintData>('alphamint')
+      .from('alphamint')
       .select('mint_id')
       .eq('whitelist_wallet', walletAddress)
       .order('mint_id', { ascending: false })
@@ -121,7 +121,7 @@ export async function fetchLatestMintId(walletAddress: string) {
 export const checkWalletAddress = async (address: string): Promise<boolean> => {
   try {
     const { data, error } = await supabase
-      .from<AlphamintData, AlphamintData>('alphamint')
+      .from('alphamint')
       .select('source_holder_wallet')
       .eq('whitelist_wallet', address);
 
