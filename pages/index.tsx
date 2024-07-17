@@ -99,94 +99,96 @@ useEffect(() => {
 }, [nftAddress, nftAddress2, nftAddress3]);
 
   const handleSubmit = async () => {
-    try {
-      const isWhitelistedAddress = localStorage.getItem("whiteListAddress");
-      if (!isWhitelistedAddress) {
-        throw new Error("No whitelisted address found");
-      }
+  try {
+    const isWhitelistedAddress = localStorage.getItem("whiteListAddress");
+    if (!isWhitelistedAddress) {
+      throw new Error("No whitelisted address found");
+    }
 
-      const isWhitelisted = await isAddressWhitelisted(isWhitelistedAddress);
-      const checkWalletAlreadyPresent = await checkWalletAddress(isWhitelistedAddress);
+    const isWhitelisted = await isAddressWhitelisted(isWhitelistedAddress);
+    const checkWalletAlreadyPresent = await checkWalletAddress(isWhitelistedAddress);
 
-      if (checkWalletAlreadyPresent) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "This wallet address is already registered.",
-          confirmButtonText: "OK"
-        });
-        return false;
-      }
+    if (checkWalletAlreadyPresent) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "This wallet address is already registered.",
+        confirmButtonText: "OK"
+      });
+      return false;
+    }
 
-      const errors = {
-        optionSelected: selectedSource === "",
-        pfpAddress: nftAddress === "",
-        sourceHolderAddress: holderAddress === "",
-        destinationWalletAddress: recipientAddress === "",
-        paymentTxHash: paymentHash === ""
+    const errors = {
+      optionSelected: selectedSource === "",
+      pfpAddress: nftAddress === "",
+      sourceHolderAddress: holderAddress === "",
+      destinationWalletAddress: recipientAddress === "",
+      paymentTxHash: paymentHash === ""
+    };
+
+    if (
+      errors.pfpAddress ||
+      errors.sourceHolderAddress ||
+      errors.destinationWalletAddress ||
+      errors.paymentTxHash ||
+      errors.optionSelected
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Validation Error",
+        text: "Please fill in all required fields.",
+        confirmButtonText: "OK"
+      });
+      return true;
+    }
+
+    if (isWhitelisted) {
+      const objData = {
+        nftAddress,
+        holderAddress,
+        recipientAddress,
+        paymentHash,
+        isWhitelistedAddress,
+        selectedSource,
+        nftAddress2,
+        nftAddress3
       };
 
-      if (
-        errors.pfpAddress ||
-        errors.sourceHolderAddress ||
-        errors.destinationWalletAddress ||
-        errors.paymentTxHash ||
-        errors.optionSelected
-      ) {
-        Swal.fire({
-          icon: "error",
-          title: "Validation Error",
-          text: "Please fill in all required fields.",
-          confirmButtonText: "OK"
-        });
-        return true;
-      }
+      // eslint-disable-next-line no-console
+      console.log("Submitting data:", objData);
 
-      if (isWhitelisted) {
-       const objData = {
-  nftAddress,
-  holderAddress,
-  recipientAddress,
-  paymentHash,
-  isWhitelistedAddress,
-  selectedSource,
-  nftAddress2,
-  nftAddress3
-};
-        
-console.log("Submitting data:", objData);
-        
-        const isValidHolderAddress = validateHolderAddress(selectedSource);
-        if (isValidHolderAddress) {
-          const create = await register(objData);
+      const isValidHolderAddress = validateHolderAddress(selectedSource);
+      if (isValidHolderAddress) {
+        const create = await register(objData);
 
-          if (create) {
-            const mintedId = await fetchLatestMintId(isWhitelistedAddress);
-            setMintId(mintedId);
+        if (create) {
+          const mintedId = await fetchLatestMintId(isWhitelistedAddress);
+          setMintId(mintedId);
 
-            Swal.fire({
-              icon: "success",
-              title: "Registration Successful",
-              text: "You have successfully registered.",
-              confirmButtonText: "OK"
-            });
-          }
-        } else {
           Swal.fire({
-            icon: "error",
-            title: "Oops!",
-            text: "An error occurred while registering.",
+            icon: "success",
+            title: "Registration Successful",
+            text: "You have successfully registered.",
             confirmButtonText: "OK"
           });
         }
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops!",
+          text: "An error occurred while registering.",
+          confirmButtonText: "OK"
+        });
       }
-
-      return true;
-    } catch (error) {
-      // Handle error (optional)
-      return false;
     }
-  };
+
+    return true;
+  } catch (error) {
+    // Handle error (optional)
+    return false;
+  }
+};
+
 
 useEffect(() => {
   const timeoutId = setTimeout(() => {
