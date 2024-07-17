@@ -55,7 +55,6 @@ function getRandomInt() {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-
 export async function register(objData: any): Promise<boolean> {
   try {
     const {
@@ -126,29 +125,6 @@ export async function fetchLatestMintId(walletAddress: string) {
   }
 }
 
-
-export async function fetchLatestMintId(walletAddress: string) {
-  try {
-    const { data, error } = await supabase
-      .from('alphamint')
-      .select('mint_id')
-      .eq('whitelist_wallet', walletAddress)
-      .order('mint_id', { ascending: false })
-      .limit(1);
-
-    if (error) {
-      return null;
-    }
-    if (data && data.length > 0) {
-      return data[0].mint_id;
-    } else {
-      return null;
-    }
-  } catch (error) {
-    return null;
-  }
-}
-
 export const checkWalletAddress = async (address: string): Promise<boolean> => {
   try {
     const { data, error } = await supabase
@@ -157,6 +133,7 @@ export const checkWalletAddress = async (address: string): Promise<boolean> => {
       .eq('whitelist_wallet', address);
 
     if (error) {
+      console.error("Error checking wallet address:", error.message);
       return false;
     }
 
@@ -166,6 +143,7 @@ export const checkWalletAddress = async (address: string): Promise<boolean> => {
 
     return false;
   } catch (error) {
+    console.error("Unexpected error checking wallet address:", error.message);
     return false;
   }
 };
