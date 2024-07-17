@@ -34,7 +34,7 @@ export default function Home() {
   const router = useRouter();
   const [nftAddress, setNftAddress] = useState("");
   const [holderAddress, setHolderAddress] = useState("");
-  const [reciepientAddress, setReciepientAddress] = useState("");
+  const [recipientAddress, setRecipientAddress] = useState("");
   const [paymentHash, setPaymentHash] = useState("");
   const [selectedSource, setSelectedSource] = useState("");
   const [mintId, setMintId] = useState("");
@@ -61,7 +61,7 @@ export default function Home() {
       } else {
         return false;
       }
-    } catch (error: any) {
+    } catch {
       return false;
     }
   }
@@ -74,7 +74,7 @@ export default function Home() {
         router.push("/auth/login");
       }
     } catch (error) {
-      console.error("Error logging out:", error);
+      console.error("Error logging out:", error); // Log error for debugging
     }
   };
 
@@ -122,7 +122,7 @@ export default function Home() {
         optionSelected: selectedSource === "",
         pfpAddress: nftAddress === "",
         sourceHolderAddress: holderAddress === "",
-        destinationWalletAddress: reciepientAddress === "",
+        destinationWalletAddress: recipientAddress === "",
         paymentTxHash: paymentHash === ""
       };
 
@@ -146,7 +146,7 @@ export default function Home() {
         const objData = {
           nftAddress,
           holderAddress,
-          reciepientAddress,
+          recipientAddress,
           paymentHash,
           isWhitelistedAddress,
           selectedSource,
@@ -181,14 +181,14 @@ export default function Home() {
 
       return true;
     } catch (error) {
-      console.error("Error during submission:", error);
+      console.error("Error during submission:", error); // Log error for debugging
       return false;
     }
   };
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      if (reciepientAddress) {
+      if (recipientAddress) {
         if (!selectedSource) {
           Swal.fire({
             icon: "error",
@@ -197,7 +197,7 @@ export default function Home() {
             confirmButtonText: "OK"
           });
         }
-        const isValidEth = isValidEthAddress(reciepientAddress);
+        const isValidEth = isValidEthAddress(recipientAddress);
         if (!isValidEth) {
           Swal.fire({
             icon: "error",
@@ -209,7 +209,7 @@ export default function Home() {
       }
     }, 500);
     return () => clearTimeout(timeoutId);
-  }, [reciepientAddress, selectedSource]);
+  }, [recipientAddress, selectedSource]);
 
   const [openStepModal, setopenStepModal] = useState(false);
 
@@ -317,9 +317,9 @@ export default function Home() {
                       </Typography>
                       <InputFieldCommon
                         type="text"
-                        value={reciepientAddress}
+                        value={recipientAddress}
                         onChange={(e) => {
-                          setReciepientAddress(e.target.value);
+                          setRecipientAddress(e.target.value);
                         }}
                       />
                     </Box>
@@ -350,7 +350,7 @@ export default function Home() {
                   {!mintId &&
                   nftAddress.length > 0 &&
                   holderAddress.length > 0 &&
-                  reciepientAddress.length > 0 ? (
+                  recipientAddress.length > 0 ? (
                     <Grid item xs={12}>
                       <Box className="paymentAdress">
                         <Typography variant="h5" className="hdPymnt">
@@ -461,7 +461,7 @@ export default function Home() {
           <Typography variant="body1">
             Please check our discord for updates. Your mint ID is{" "}
             <Typography variant="caption" className="numbrID">
-              1038
+              {mintId}
             </Typography>
           </Typography>
         </Box>
