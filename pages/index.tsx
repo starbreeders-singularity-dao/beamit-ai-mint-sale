@@ -223,7 +223,7 @@ export default function Home() {
             <Container fixed>
               <Box className="homeSourceWrapTop">
                 <Box className="homeSourceWrapLf">
-                  <Typography variant="body1">Source PFP:</Typography>
+                  <Typography variant="body1">Source Chain of your PFPs:</Typography>
                 </Box>
 
                 <Box className="homeSourceWrapRt">
