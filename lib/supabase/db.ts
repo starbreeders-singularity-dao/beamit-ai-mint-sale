@@ -55,7 +55,8 @@ function getRandomInt() {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export async function register(objData: AlphamintData): Promise<boolean> {
+
+export async function register(objData: any): Promise<boolean> {
   try {
     const {
       nftAddress,
@@ -78,21 +79,53 @@ export async function register(objData: AlphamintData): Promise<boolean> {
         source_nft3: nftAddress3 || null,
         mint_id: getRandomInt()
       })
-      .eq('whitelist_wallet', isWhitelistedAddress);
+      .eq('whitelist_wallet', isWhitelistedAddress)
+      .select();
 
     if (error) {
+      console.error("Error registering user:", error.message);
       return false;
     }
 
-    if (!data || (data as any[]).length === 0) {
+    if (!data || data.length === 0) {
+      console.log("No rows updated.");
       return false;
     }
 
+    console.log("Data updated successfully:", data);
     return true;
   } catch (error) {
+    console.error("Error registering user:", error.message);
     return false;
   }
 }
+
+export async function fetchLatestMintId(walletAddress: string) {
+  try {
+    const { data, error } = await supabase
+      .from('alphamint')
+      .select('mint_id')
+      .eq('whitelist_wallet', walletAddress)
+      .order('mint_id', { ascending: false })
+      .limit(1);
+
+    if (error) {
+      console.error('Error fetching latest mint_id:', error.message);
+      return null;
+    }
+    if (data && data.length > 0) {
+      console.log('Mint ID fetched successfully:', data[0].mint_id);
+      return data[0].mint_id;
+    } else {
+      console.log('No mint_id found for the given wallet address.');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching latest mint_id:', error.message);
+    return null;
+  }
+}
+
 
 export async function fetchLatestMintId(walletAddress: string) {
   try {
