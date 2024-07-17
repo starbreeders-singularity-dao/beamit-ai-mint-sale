@@ -78,21 +78,24 @@ const handleLogout = () => {
   }
 };
 
+
+
   const updatePaymentMethodList = () => {
-    let multiplier = 1;
-    if (nftAddress && nftAddress2 && nftAddress3) {
-      multiplier = 3;
-    } else if (nftAddress && nftAddress2) {
-      multiplier = 2;
-    }
+  let multiplier = 1;
+  if (nftAddress && nftAddress2 && nftAddress3) {
+    multiplier = 3;
+  } else if (nftAddress && nftAddress2) {
+    multiplier = 2;
+  }
 
-    const updatedList = initialPaymentMethodList.map(item => ({
-      ...item,
-      price: (parseFloat(item.price) * multiplier).toString()
-    }));
+  const updatedList = initialPaymentMethodList.map(item => ({
+    ...item,
+    price: (parseFloat(item.price) * multiplier).toFixed(5)
+  }));
 
-    setPaymentMethodList(updatedList);
-  };
+  setPaymentMethodList(updatedList);
+};
+
 
   useEffect(() => {
     updatePaymentMethodList();
