@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import CommonRadio from "@/components/CommonChecked/CommonRadio";
 import assest from "@/json/assest";
 import { checkedSource } from "@/json/mock/checkedSource.mock";
@@ -6,7 +7,7 @@ import {
   checkWalletAddress,
   fetchLatestMintId,
   isAddressWhitelisted,
-  register,
+  register
 } from "@/lib/supabase/db";
 import { HomePageStyled } from "@/styles/StyledComponents/HomePageStyled";
 import InputFieldCommon from "@/ui/CommonInput/CommonInput";
@@ -17,7 +18,7 @@ import Grid from "@mui/material/Grid";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableRow from "@mui.material/TableRow";
+import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -78,136 +79,138 @@ export default function Home() {
   };
 
   const updatePaymentMethodList = () => {
-    let multiplier = 1;
-    if (nftAddress && nftAddress2 && nftAddress3) {
-      multiplier = 3;
-    } else if (nftAddress && nftAddress2) {
-      multiplier = 2;
-    }
+  let multiplier = 1;
+  if (nftAddress && nftAddress2 && nftAddress3) {
+    multiplier = 3;
+  } else if (nftAddress && nftAddress2) {
+    multiplier = 2;
+  }
 
-    const updatedList = initialPaymentMethodList.map((item) => ({
-      ...item,
-      price: (parseFloat(item.price) * multiplier).toFixed(5),
-    }));
+  const updatedList = initialPaymentMethodList.map(item => ({
+    ...item,
+    price: (parseFloat(item.price) * multiplier).toFixed(5)
+  }));
 
-    setPaymentMethodList(updatedList);
-  };
+  setPaymentMethodList(updatedList);
+};
 
-  useEffect(() => {
-    updatePaymentMethodList();
-  }, [nftAddress, nftAddress2, nftAddress3]);
+useEffect(() => {
+  updatePaymentMethodList();
+}, [nftAddress, nftAddress2, nftAddress3]);
 
   const handleSubmit = async () => {
-    try {
-      const isWhitelistedAddress = localStorage.getItem("whiteListAddress");
-      if (!isWhitelistedAddress) {
-        throw new Error("No whitelisted address found");
-      }
+  try {
+    const isWhitelistedAddress = localStorage.getItem("whiteListAddress");
+    if (!isWhitelistedAddress) {
+      throw new Error("No whitelisted address found");
+    }
 
-      const isWhitelisted = await isAddressWhitelisted(isWhitelistedAddress);
-      const checkWalletAlreadyPresent = await checkWalletAddress(isWhitelistedAddress);
+    const isWhitelisted = await isAddressWhitelisted(isWhitelistedAddress);
+    const checkWalletAlreadyPresent = await checkWalletAddress(isWhitelistedAddress);
 
-      if (checkWalletAlreadyPresent) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "This wallet address is already registered.",
-          confirmButtonText: "OK",
-        });
-        return false;
-      }
+    if (checkWalletAlreadyPresent) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "This wallet address is already registered.",
+        confirmButtonText: "OK"
+      });
+      return false;
+    }
 
-      const errors = {
-        optionSelected: selectedSource === "",
-        pfpAddress: nftAddress === "",
-        sourceHolderAddress: holderAddress === "",
-        destinationWalletAddress: recipientAddress === "",
-        paymentTxHash: paymentHash === "",
+    const errors = {
+      optionSelected: selectedSource === "",
+      pfpAddress: nftAddress === "",
+      sourceHolderAddress: holderAddress === "",
+      destinationWalletAddress: recipientAddress === "",
+      paymentTxHash: paymentHash === ""
+    };
+
+    if (
+      errors.pfpAddress ||
+      errors.sourceHolderAddress ||
+      errors.destinationWalletAddress ||
+      errors.paymentTxHash ||
+      errors.optionSelected
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Validation Error",
+        text: "Please fill in all required fields.",
+        confirmButtonText: "OK"
+      });
+      return true;
+    }
+
+    if (isWhitelisted) {
+      const objData = {
+        nftAddress,
+        holderAddress,
+        recipientAddress,
+        paymentHash,
+        isWhitelistedAddress,
+        selectedSource,
+        nftAddress2,
+        nftAddress3
       };
 
-      if (
-        errors.pfpAddress ||
-        errors.sourceHolderAddress ||
-        errors.destinationWalletAddress ||
-        errors.paymentTxHash ||
-        errors.optionSelected
-      ) {
+      const isValidHolderAddress = validateHolderAddress(selectedSource);
+      if (isValidHolderAddress) {
+        const create = await register(objData);
+
+        if (create) {
+          const mintedId = await fetchLatestMintId(isWhitelistedAddress);
+          setMintId(mintedId);
+
+          Swal.fire({
+            icon: "success",
+            title: "Registration Successful",
+            text: "You have successfully registered.",
+            confirmButtonText: "OK"
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops!",
+            text: "An error occurred while registering.",
+            confirmButtonText: "OK"
+          });
+        }
+      }
+    }
+
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+
+useEffect(() => {
+  const timeoutId = setTimeout(() => {
+    if (recipientAddress) {
+      if (!selectedSource) {
+        Swal.fire({
+          icon: "error",
+          title: "Select Options",
+          text: "Invalid Options",
+          confirmButtonText: "OK"
+        });
+      }
+      const isValidEth = isValidEthAddress(recipientAddress);
+      if (!isValidEth) {
         Swal.fire({
           icon: "error",
           title: "Validation Error",
-          text: "Please fill in all required fields.",
-          confirmButtonText: "OK",
+          text: "Invalid Ethereum Address",
+          confirmButtonText: "OK"
         });
-        return true;
       }
-
-      if (isWhitelisted) {
-        const objData = {
-          nftAddress,
-          holderAddress,
-          recipientAddress,
-          paymentHash,
-          isWhitelistedAddress,
-          selectedSource,
-          nftAddress2,
-          nftAddress3,
-        };
-
-        const isValidHolderAddress = validateHolderAddress(selectedSource);
-        if (isValidHolderAddress) {
-          const create = await register(objData);
-
-          if (create) {
-            const mintedId = await fetchLatestMintId(isWhitelistedAddress);
-            setMintId(mintedId);
-
-            Swal.fire({
-              icon: "success",
-              title: "Registration Successful",
-              text: "You have successfully registered.",
-              confirmButtonText: "OK",
-            });
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Oops!",
-              text: "An error occurred while registering.",
-              confirmButtonText: "OK",
-            });
-          }
-        }
-      }
-
-      return true;
-    } catch (error) {
-      return false;
     }
-  };
+  }, 500);
+  return () => clearTimeout(timeoutId);
+}, [recipientAddress, selectedSource]);
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (recipientAddress) {
-        if (!selectedSource) {
-          Swal.fire({
-            icon: "error",
-            title: "Select Options",
-            text: "Invalid Options",
-            confirmButtonText: "OK",
-          });
-        }
-        const isValidEth = isValidEthAddress(recipientAddress);
-        if (!isValidEth) {
-          Swal.fire({
-            icon: "error",
-            title: "Validation Error",
-            text: "Invalid Ethereum Address",
-            confirmButtonText: "OK",
-          });
-        }
-      }
-    }, 500);
-    return () => clearTimeout(timeoutId);
-  }, [recipientAddress, selectedSource]);
 
   const [openStepModal, setopenStepModal] = useState(false);
 
@@ -223,15 +226,15 @@ export default function Home() {
             <Container fixed>
               <Box className="homeSourceWrapTop">
                 <Box className="homeSourceWrapLf">
-                  <Typography variant="body1">Source Chain of your PFPs:</Typography>
+                  <Typography variant="body1">Source PFP:</Typography>
                 </Box>
 
                 <Box className="homeSourceWrapRt">
                   <Box className="homeSourceChckbx">
-                    {checkedSource.map((item) => (
+                    {checkedSource.map((item, index) => (
                       <CommonRadio
                         name="source"
-                        key={item?.name} // Using `name` as the unique key
+                        key={index}
                         label={item?.name}
                         value={item?.value}
                         checked={selectedSource === item?.value}
@@ -261,14 +264,6 @@ export default function Home() {
                         }}
                       />
                     </Box>
-                    <div className="floating-box" id="box1">
-                      <p>
-                        Now put your PFP NFTs/Ordinals ID here.<br />
-                        Ordinals: Inscription number <br />
-                        ETH/SOL NFTS: NFT Address
-                      </p>
-                      <div className="arrow" id="arrow1" />
-                    </div>
                   </Grid>
 
                   <Grid item xs={12}>
@@ -316,20 +311,21 @@ export default function Home() {
                     </Box>
                   </Grid>
 
-                  <Grid item xs={12}>
-                    <Box className="inputfldInner">
-                      <Typography variant="h5" className="inputLabel">
-                        Ethereum Destination Wallet Address
-                      </Typography>
-                      <InputFieldCommon
-                        type="text"
-                        value={recipientAddress}
-                        onChange={(e) => {
-                          setRecipientAddress(e.target.value);
-                        }}
-                      />
-                    </Box>
-                  </Grid>
+<Grid item xs={12}>
+  <Box className="inputfldInner">
+    <Typography variant="h5" className="inputLabel">
+      Ethereum Destination Wallet Address
+    </Typography>
+    <InputFieldCommon
+      type="text"
+      value={recipientAddress}
+      onChange={(e) => {
+        setRecipientAddress(e.target.value);
+      }}
+    />
+  </Box>
+</Grid>
+
 
                   {mintId && (
                     <Grid item xs={12}>
@@ -354,9 +350,9 @@ export default function Home() {
                   )}
 
                   {!mintId &&
-                    nftAddress.length > 0 &&
-                    holderAddress.length > 0 &&
-                    recipientAddress.length > 0 ? (
+                  nftAddress.length > 0 &&
+                  holderAddress.length > 0 &&
+                  recipientAddress.length > 0 ? (
                     <Grid item xs={12}>
                       <Box className="paymentAdress">
                         <Typography variant="h5" className="hdPymnt">
@@ -367,8 +363,8 @@ export default function Home() {
                         <Box className="paymentAdressTable">
                           <Table>
                             <TableBody>
-                              {paymentMethodList.map((item) => (
-                               <TableRow key={item?.name}> {/* Using `name` as the unique key */}
+                              {paymentMethodList.map((item, index) => (
+                                <TableRow key={index}>
                                   <TableCell component="td" scope="row">
                                     <Box className="paymentInfoInner">
                                       <Box className="coinName">
