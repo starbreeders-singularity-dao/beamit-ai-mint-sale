@@ -76,22 +76,21 @@ export async function register(objData: any): Promise<boolean> {
     const { data, error } = await supabase
       .from('alphamint')
       .update(updateData)
-      .eq('whitelist_wallet', isWhitelistedAddress);
+      .eq('whitelist_wallet', isWhitelistedAddress)
+      .select(); // Ensure data is returned
 
     if (error) {
-      // Handle error appropriately
       return false;
     }
 
-    if (data && data.length === 0) {
+    if (!data || data.length === 0) {
       // Handle case where update did not affect any rows
       return false;
     }
 
     return true;
   } catch (error: any) {
-    // Handle any unexpected errors and return false
-    return false;
+    return false; // Handle any unexpected errors and return false
   }
 }
 
