@@ -154,8 +154,6 @@ useEffect(() => {
         nftAddress3
       };
 
-      console.log("Submitting data:", objData);
-
       const isValidHolderAddress = validateHolderAddress(selectedSource);
       if (isValidHolderAddress) {
         const create = await register(objData);
@@ -163,8 +161,6 @@ useEffect(() => {
         if (create) {
           const mintedId = await fetchLatestMintId(isWhitelistedAddress);
           setMintId(mintedId);
-
-          console.log("Mint ID set:", mintedId);
 
           Swal.fire({
             icon: "success",
@@ -185,11 +181,9 @@ useEffect(() => {
 
     return true;
   } catch (error) {
-    console.error(error);
     return false;
   }
 };
-
 
 
 useEffect(() => {
