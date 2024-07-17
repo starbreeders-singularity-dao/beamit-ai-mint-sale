@@ -154,7 +154,6 @@ useEffect(() => {
         nftAddress3
       };
 
-      // eslint-disable-next-line no-console
       console.log("Submitting data:", objData);
 
       const isValidHolderAddress = validateHolderAddress(selectedSource);
@@ -165,29 +164,32 @@ useEffect(() => {
           const mintedId = await fetchLatestMintId(isWhitelistedAddress);
           setMintId(mintedId);
 
+          console.log("Mint ID set:", mintedId);
+
           Swal.fire({
             icon: "success",
             title: "Registration Successful",
             text: "You have successfully registered.",
             confirmButtonText: "OK"
           });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops!",
+            text: "An error occurred while registering.",
+            confirmButtonText: "OK"
+          });
         }
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Oops!",
-          text: "An error occurred while registering.",
-          confirmButtonText: "OK"
-        });
       }
     }
 
     return true;
   } catch (error) {
-    // Handle error (optional)
+    console.error(error);
     return false;
   }
 };
+
 
 
 useEffect(() => {
