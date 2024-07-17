@@ -51,21 +51,22 @@ export default function Home() {
     return isAddress(address);
   }
 
-  function validateHolderAddress(selectedSource: any): boolean {
-    try {
-      if (selectedSource === "BTC Ordinal") {
-        return true 
-      } else if (selectedSource === "ETH NFT") {
-        return true 
-      } else if (selectedSource === "Solana NFT") {
-        return true 
-      } else {
-        return false;
-      }
-    } catch (error: any) {
+function validateHolderAddress(selectedSource: any): boolean {
+  try {
+    if (selectedSource === "BTC Ordinal") {
+      return true;
+    } else if (selectedSource === "ETH NFT") {
+      return true;
+    } else if (selectedSource === "Solana NFT") {
+      return true;
+    } else {
       return false;
     }
+  } catch (error: any) {
+    return false;
   }
+}
+
 
   const handleLogout = () => {
     try {
