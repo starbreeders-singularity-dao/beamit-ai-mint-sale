@@ -55,6 +55,9 @@ body {
         color: #f27474;
       }
     }
+
+    
+    
   }
 }
 .swal2-actions{
@@ -150,6 +153,9 @@ body {
         color: #f27474;
       }
     }
+
+    
+    
   }
 }
 .swal2-actions{
@@ -188,6 +194,11 @@ body {
   }
 }
 
+
+
+
+/* Add this CSS to your global stylesheet (e.g., styles/global.css) */
+
 .floating-box {
   position: absolute;
   width: 250px;
@@ -209,7 +220,7 @@ body {
   z-index: 10;
 }
 
-/* Enable the first box and arrow */
+/* Example positions for the first box and arrow */
 #box1 {
   top: 100px;
   left: 20px;
@@ -220,16 +231,7 @@ body {
   left: 270px;
 }
 
-/* Disable other boxes and arrows for now */
-#box2, #box3, #box4 {
-  display: none;
-}
-
-#arrow2, #arrow3, #arrow4 {
-  display: none;
-}
-
-/* Positions for other boxes and arrows (disabled) */
+/* Adjust positions for other boxes and arrows similarly */
 #box2 {
   top: 250px;
   left: 20px;
