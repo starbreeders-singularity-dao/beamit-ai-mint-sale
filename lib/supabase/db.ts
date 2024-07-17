@@ -90,31 +90,6 @@ export async function register(objData: any): Promise<boolean> {
   }
 }
 
-export const isAddressWhitelisted = async (address: string) => {
-  try {
-    const trimmedAddress = address.trim();
-
-    const { data, error } = await supabase
-      .from("alphamint")
-      .select("id")
-      .eq("whitelist_wallet", trimmedAddress);
-    if (error) {
-      // eslint-disable-next-line no-console
-      console.error("Error checking whitelist:", error.message);
-      return false;
-    }
-    if (data && data.length > 0) {
-      return true;
-    } else {
-      return false;
-    }
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error("Error checking whitelist:", error.message);
-    return false;
-  }
-};
-
 export async function fetchLatestMintId(walletAddress: string) {
   try {
     const { data, error } = await supabase
@@ -167,4 +142,3 @@ export const checkWalletAddress = async (address: string): Promise<boolean> => {
     return false;
   }
 };
-
