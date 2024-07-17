@@ -79,138 +79,136 @@ export default function Home() {
   };
 
   const updatePaymentMethodList = () => {
-  let multiplier = 1;
-  if (nftAddress && nftAddress2 && nftAddress3) {
-    multiplier = 3;
-  } else if (nftAddress && nftAddress2) {
-    multiplier = 2;
-  }
+    let multiplier = 1;
+    if (nftAddress && nftAddress2 && nftAddress3) {
+      multiplier = 3;
+    } else if (nftAddress && nftAddress2) {
+      multiplier = 2;
+    }
 
-  const updatedList = initialPaymentMethodList.map(item => ({
-    ...item,
-    price: (parseFloat(item.price) * multiplier).toFixed(5)
-  }));
+    const updatedList = initialPaymentMethodList.map(item => ({
+      ...item,
+      price: (parseFloat(item.price) * multiplier).toFixed(5)
+    }));
 
-  setPaymentMethodList(updatedList);
-};
+    setPaymentMethodList(updatedList);
+  };
 
-useEffect(() => {
-  updatePaymentMethodList();
-}, [nftAddress, nftAddress2, nftAddress3]);
+  useEffect(() => {
+    updatePaymentMethodList();
+  }, [nftAddress, nftAddress2, nftAddress3]);
 
   const handleSubmit = async () => {
-  try {
-    const isWhitelistedAddress = localStorage.getItem("whiteListAddress");
-    if (!isWhitelistedAddress) {
-      throw new Error("No whitelisted address found");
-    }
+    try {
+      const isWhitelistedAddress = localStorage.getItem("whiteListAddress");
+      if (!isWhitelistedAddress) {
+        throw new Error("No whitelisted address found");
+      }
 
-    const isWhitelisted = await isAddressWhitelisted(isWhitelistedAddress);
-    const checkWalletAlreadyPresent = await checkWalletAddress(isWhitelistedAddress);
+      const isWhitelisted = await isAddressWhitelisted(isWhitelistedAddress);
+      const checkWalletAlreadyPresent = await checkWalletAddress(isWhitelistedAddress);
 
-    if (checkWalletAlreadyPresent) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "This wallet address is already registered.",
-        confirmButtonText: "OK"
-      });
-      return false;
-    }
+      if (checkWalletAlreadyPresent) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "This wallet address is already registered.",
+          confirmButtonText: "OK"
+        });
+        return false;
+      }
 
-    const errors = {
-      optionSelected: selectedSource === "",
-      pfpAddress: nftAddress === "",
-      sourceHolderAddress: holderAddress === "",
-      destinationWalletAddress: recipientAddress === "",
-      paymentTxHash: paymentHash === ""
-    };
-
-    if (
-      errors.pfpAddress ||
-      errors.sourceHolderAddress ||
-      errors.destinationWalletAddress ||
-      errors.paymentTxHash ||
-      errors.optionSelected
-    ) {
-      Swal.fire({
-        icon: "error",
-        title: "Validation Error",
-        text: "Please fill in all required fields.",
-        confirmButtonText: "OK"
-      });
-      return true;
-    }
-
-    if (isWhitelisted) {
-      const objData = {
-        nftAddress,
-        holderAddress,
-        recipientAddress,
-        paymentHash,
-        isWhitelistedAddress,
-        selectedSource,
-        nftAddress2,
-        nftAddress3
+      const errors = {
+        optionSelected: selectedSource === "",
+        pfpAddress: nftAddress === "",
+        sourceHolderAddress: holderAddress === "",
+        destinationWalletAddress: recipientAddress === "",
+        paymentTxHash: paymentHash === ""
       };
 
-      const isValidHolderAddress = validateHolderAddress(selectedSource);
-      if (isValidHolderAddress) {
-        const create = await register(objData);
+      if (
+        errors.pfpAddress ||
+        errors.sourceHolderAddress ||
+        errors.destinationWalletAddress ||
+        errors.paymentTxHash ||
+        errors.optionSelected
+      ) {
+        Swal.fire({
+          icon: "error",
+          title: "Validation Error",
+          text: "Please fill in all required fields.",
+          confirmButtonText: "OK"
+        });
+        return true;
+      }
 
-        if (create) {
-          const mintedId = await fetchLatestMintId(isWhitelistedAddress);
-          setMintId(mintedId);
+      if (isWhitelisted) {
+        const objData = {
+          nftAddress,
+          holderAddress,
+          recipientAddress,
+          paymentHash,
+          isWhitelistedAddress,
+          selectedSource,
+          nftAddress2,
+          nftAddress3
+        };
 
-          Swal.fire({
-            icon: "success",
-            title: "Registration Successful",
-            text: "You have successfully registered.",
-            confirmButtonText: "OK"
-          });
-        } else {
+        const isValidHolderAddress = validateHolderAddress(selectedSource);
+        if (isValidHolderAddress) {
+          const create = await register(objData);
+
+          if (create) {
+            const mintedId = await fetchLatestMintId(isWhitelistedAddress);
+            setMintId(mintedId);
+
+            Swal.fire({
+              icon: "success",
+              title: "Registration Successful",
+              text: "You have successfully registered.",
+              confirmButtonText: "OK"
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops!",
+              text: "An error occurred while registering.",
+              confirmButtonText: "OK"
+            });
+          }
+        }
+      }
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (recipientAddress) {
+        if (!selectedSource) {
           Swal.fire({
             icon: "error",
-            title: "Oops!",
-            text: "An error occurred while registering.",
+            title: "Select Options",
+            text: "Invalid Options",
+            confirmButtonText: "OK"
+          });
+        }
+        const isValidEth = isValidEthAddress(recipientAddress);
+        if (!isValidEth) {
+          Swal.fire({
+            icon: "error",
+            title: "Validation Error",
+            text: "Invalid Ethereum Address",
             confirmButtonText: "OK"
           });
         }
       }
-    }
-
-    return true;
-  } catch (error) {
-    return false;
-  }
-};
-
-
-useEffect(() => {
-  const timeoutId = setTimeout(() => {
-    if (recipientAddress) {
-      if (!selectedSource) {
-        Swal.fire({
-          icon: "error",
-          title: "Select Options",
-          text: "Invalid Options",
-          confirmButtonText: "OK"
-        });
-      }
-      const isValidEth = isValidEthAddress(recipientAddress);
-      if (!isValidEth) {
-        Swal.fire({
-          icon: "error",
-          title: "Validation Error",
-          text: "Invalid Ethereum Address",
-          confirmButtonText: "OK"
-        });
-      }
-    }
-  }, 500);
-  return () => clearTimeout(timeoutId);
-}, [recipientAddress, selectedSource]);
-
+    }, 500);
+    return () => clearTimeout(timeoutId);
+  }, [recipientAddress, selectedSource]);
 
   const [openStepModal, setopenStepModal] = useState(false);
 
@@ -245,12 +243,36 @@ useEffect(() => {
                 </Box>
               </Box>
 
+              <Box id="box1" className="floating-box">
+                <Typography>
+                  Welcome to the Beamit AI Alphamint. First choose the location chain of the PFP you want to generate a 3D avatar from.
+                </Typography>
+              </Box>
+              <Box id="arrow1" className="arrow"></Box>
+
+              <Box id="box2" className="floating-box">
+                <Typography>
+                  Now post your PFP NFTs/Ordinals ID here. Ordinals: Inscription number. ETH/SOL NFT: NFT Address. Choose up to 3 PFP to mint 3D Avatars!
+                </Typography>
+              </Box>
+              <Box id="arrow2" className="arrow"></Box>
+
+              <Box id="box3" className="floating-box">
+                <Typography>
+                  Now post the Wallet address, where your ordinals are stored in.
+                </Typography>
+              </Box>
+              <Box id="arrow3" className="arrow"></Box>
+
+              <Box id="box4" className="floating-box">
+                <Typography>
+                  Next, paste the Ethereum wallet. This is where we will send your 3D Avatar.
+                </Typography>
+              </Box>
+              <Box id="arrow4" className="arrow"></Box>
+
               <Box className="homeSourceWrapBtm">
-                <Grid
-                  container
-                  rowSpacing={{ xs: 2, sm: 3, md: 4 }}
-                  columnSpacing={{ xs: 1, sm: 2 }}
-                >
+                <Grid container rowSpacing={{ xs: 2, sm: 3, md: 4 }} columnSpacing={{ xs: 1, sm: 2 }}>
                   <Grid item xs={12}>
                     <Box className="inputfldInner">
                       <Typography variant="h5" className="inputLabel">
@@ -311,33 +333,28 @@ useEffect(() => {
                     </Box>
                   </Grid>
 
-<Grid item xs={12}>
-  <Box className="inputfldInner">
-    <Typography variant="h5" className="inputLabel">
-      Ethereum Destination Wallet Address
-    </Typography>
-    <InputFieldCommon
-      type="text"
-      value={recipientAddress}
-      onChange={(e) => {
-        setRecipientAddress(e.target.value);
-      }}
-    />
-  </Box>
-</Grid>
-
+                  <Grid item xs={12}>
+                    <Box className="inputfldInner">
+                      <Typography variant="h5" className="inputLabel">
+                        Ethereum Destination Wallet Address
+                      </Typography>
+                      <InputFieldCommon
+                        type="text"
+                        value={recipientAddress}
+                        onChange={(e) => {
+                          setRecipientAddress(e.target.value);
+                        }}
+                      />
+                    </Box>
+                  </Grid>
 
                   {mintId && (
                     <Grid item xs={12}>
                       <Box className="txtInnerCmdl">
                         <Typography variant="body1">
                           Congratulations for attending the Beamit AI Alphamint!
-                          Given your payment and information was entered
-                          correctly, your 3D Avatar will be mintable within 10
-                          days on{" "}
-                          <Link href="http://alphamint.beamit.space.">
-                            http://alphamint.beamit.space.
-                          </Link>
+                          Given your payment and information was entered correctly, your 3D Avatar will be mintable within 10 days on{" "}
+                          <Link href="http://alphamint.beamit.space.">http://alphamint.beamit.space.</Link>
                         </Typography>
                         <Typography variant="body1">
                           Please check our discord for updates. Your mint ID is{" "}
@@ -356,8 +373,7 @@ useEffect(() => {
                     <Grid item xs={12}>
                       <Box className="paymentAdress">
                         <Typography variant="h5" className="hdPymnt">
-                          Make your payment (payment must be made from source
-                          holder Wallet Address):
+                          Make your payment (payment must be made from source holder Wallet Address):
                         </Typography>
 
                         <Box className="paymentAdressTable">
@@ -367,23 +383,15 @@ useEffect(() => {
                                 <TableRow key={index}>
                                   <TableCell component="td" scope="row">
                                     <Box className="paymentInfoInner">
-                                      <Box className="coinName">
-                                        {item?.name}
-                                      </Box>
-                                      <Box className="coinPrice">
-                                        {item?.price}
-                                      </Box>
-                                      <Box className="coinValue">
-                                        {item?.value}
-                                      </Box>
+                                      <Box className="coinName">{item?.name}</Box>
+                                      <Box className="coinPrice">{item?.price}</Box>
+                                      <Box className="coinValue">{item?.value}</Box>
                                     </Box>
                                   </TableCell>
 
                                   <TableCell component="td" scope="row">
                                     <Box className="walletAdrss">
-                                      <Typography variant="body1">
-                                        {item?.wallet}
-                                      </Typography>
+                                      <Typography variant="body1">{item?.wallet}</Typography>
                                     </Box>
                                   </TableCell>
                                 </TableRow>
@@ -446,19 +454,11 @@ useEffect(() => {
         </HomePageStyled>
       </Wrapper>
 
-      <MuiModalWrapper
-        open={openStepModal}
-        onClose={handleStepModalClose}
-        title=""
-      >
+      <MuiModalWrapper open={openStepModal} onClose={handleStepModalClose} title="">
         <Box className="modalStepOutrSc">
           <Typography variant="body1">
-            Congratulations for attending the Beamit AI Alphamint! Given your
-            payment and information was entered correctly, your 3D Avatar will
-            be mintable within 10 days on{" "}
-            <Link href="http://alphamint.beamit.space.">
-              http://alphamint.beamit.space.
-            </Link>
+            Congratulations for attending the Beamit AI Alphamint! Given your payment and information was entered correctly, your 3D Avatar will be mintable within 10 days on{" "}
+            <Link href="http://alphamint.beamit.space.">http://alphamint.beamit.space.</Link>
           </Typography>
           <Typography variant="body1">
             Please check our discord for updates. Your mint ID is{" "}
