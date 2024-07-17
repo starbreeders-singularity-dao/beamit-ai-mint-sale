@@ -1,16 +1,6 @@
 // utils/db.ts
 import { supabase } from "./supabase";
 
-interface AlphamintData {
-  nftAddress: string;
-  holderAddress: string;
-  recipientAddress: string;
-  paymentHash: string;
-  isWhitelistedAddress: string;
-  nftAddress2?: string;
-  nftAddress3?: string;
-}
-
 export async function addWalletAddress(walletAddress: string) {
   try {
     const { data, error } = await supabase
@@ -82,19 +72,15 @@ export async function register(objData: any): Promise<boolean> {
       .select();
 
     if (error) {
-      console.error("Error registering user:", error.message);
       return false;
     }
 
     if (!data || data.length === 0) {
-      console.log("No rows updated.");
       return false;
     }
 
-    console.log("Data updated successfully:", data);
     return true;
   } catch (error) {
-    console.error("Error registering user:", error.message);
     return false;
   }
 }
@@ -109,18 +95,14 @@ export async function fetchLatestMintId(walletAddress: string) {
       .limit(1);
 
     if (error) {
-      console.error('Error fetching latest mint_id:', error.message);
       return null;
     }
     if (data && data.length > 0) {
-      console.log('Mint ID fetched successfully:', data[0].mint_id);
       return data[0].mint_id;
     } else {
-      console.log('No mint_id found for the given wallet address.');
       return null;
     }
   } catch (error) {
-    console.error('Error fetching latest mint_id:', error.message);
     return null;
   }
 }
@@ -133,7 +115,6 @@ export const checkWalletAddress = async (address: string): Promise<boolean> => {
       .eq('whitelist_wallet', address);
 
     if (error) {
-      console.error("Error checking wallet address:", error.message);
       return false;
     }
 
@@ -143,7 +124,6 @@ export const checkWalletAddress = async (address: string): Promise<boolean> => {
 
     return false;
   } catch (error) {
-    console.error("Unexpected error checking wallet address:", error.message);
     return false;
   }
 };
