@@ -50,67 +50,52 @@ export async function register(objData: any): Promise<boolean> {
     const {
       nftAddress,
       holderAddress,
-      reciepientAddress,
+      recipientAddress,
       paymentHash,
       isWhitelistedAddress,
       nftAddress2,
-      nftAddress3,
+      nftAddress3
     } = objData;
 
-    const updateData: any = {
-      source_holder_wallet: holderAddress,
-      eth_dest_wallet: reciepientAddress,
-      source_nft: nftAddress,
-      payment01_hash: paymentHash,
-      mint_id: getRandomInt(),
-    };
-
-    if (nftAddress2) {
-      updateData.source_nft2 = nftAddress2;
-    }
-
-    if (nftAddress3) {
-      updateData.source_nft3 = nftAddress3;
-    }
+    console.log("Registering with data:", {
+      nftAddress,
+      holderAddress,
+      recipientAddress,
+      paymentHash,
+      isWhitelistedAddress,
+      nftAddress2,
+      nftAddress3
+    });
 
     const { data, error } = await supabase
       .from('alphamint')
-      .update(updateData)
-      .eq('whitelist_wallet', isWhitelistedAddress)
-      .select(); // Ensure data is returned
+      .update({
+        source_holder_wallet: holderAddress,
+        eth_dest_wallet: recipientAddress,
+        source_nft: nftAddress,
+        payment01_hash: paymentHash,
+        mint_id: getRandomInt()
+      })
+      .eq('whitelist_wallet', isWhitelistedAddress);
 
     if (error) {
+      console.error("Error registering user:", error.message);
       return false;
     }
 
-    if (!data || data.length === 0) {
-      // Handle case where update did not affect any rows
+    if (data.length === 0) {
+      console.log("No rows affected.");
       return false;
     }
 
+    console.log("Registration successful:", data);
     return true;
   } catch (error: any) {
+    console.error("Error registering user:", error.message);
     return false; // Handle any unexpected errors and return false
   }
 }
 
-export async function fetchLatestMintId(walletAddress: string) {
-  const { data, error } = await supabase
-    .from('alphamint')
-    .select('mint_id')
-    .eq('whitelist_wallet', walletAddress)
-    .order('mint_id', { ascending: false })
-    .limit(1);
-
-  if (error) {
-    return null;
-  }
-  if (data && data.length > 0) {
-    return data[0].mint_id;
-  } else {
-    return null;
-  }
-}
 
 export const checkWalletAddress = async (address: string): Promise<boolean> => {
   try {
