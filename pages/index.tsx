@@ -251,20 +251,24 @@ useEffect(() => {
                   rowSpacing={{ xs: 2, sm: 3, md: 4 }}
                   columnSpacing={{ xs: 1, sm: 2 }}
                 >
-                  <Grid item xs={12}>
-                    <Box className="inputfldInner">
-                      <Typography variant="h5" className="inputLabel">
-                        Source PFP NFT Address/ Ordinals Inscription ID
-                      </Typography>
-                      <InputFieldCommon
-                        type="text"
-                        value={nftAddress}
-                        onChange={(e) => {
-                          setNftAddress(e.target.value);
-                        }}
-                      />
-                    </Box>
-                  </Grid>
+                <Grid item xs={12}>
+  <Box className="inputfldInner">
+    <Typography variant="h5" className="inputLabel">
+      Source PFP NFT Address/ Ordinals Inscription ID
+    </Typography>
+    <Typography variant="body2" style={{ color: '#ff00f2' }}>
+      Please choose the PFP you want to make a 3D avatar from. Paste the Inscription number (ordinals), or the NFT address (ETH/Solana) here.
+    </Typography>
+    <InputFieldCommon
+      type="text"
+      value={nftAddress}
+      onChange={(e) => {
+        setNftAddress(e.target.value);
+      }}
+    />
+  </Box>
+</Grid>
+
 
                   <Grid item xs={12}>
                     <Box className="inputfldInner">
