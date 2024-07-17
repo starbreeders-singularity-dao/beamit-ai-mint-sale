@@ -27,8 +27,9 @@ import MuiModalWrapper from "@/ui/Modal/MuiModalWrapper";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { List, ListItem } from "@mui/material";
-import ProtectedRoute from "../components/Authentication/ProtectedRoute";
 import { paymentMethodList as initialPaymentMethodList } from "@/json/mock/paymentMethodList.mock";
+import ProtectedRoute from "../components/Authentication/ProtectedRoute";
+
 
 export default function Home() {
   const router = useRouter();
