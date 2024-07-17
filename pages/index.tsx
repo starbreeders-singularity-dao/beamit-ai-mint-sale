@@ -79,24 +79,24 @@ export default function Home() {
   };
 
   const updatePaymentMethodList = () => {
-    let multiplier = 1;
-    if (nftAddress && nftAddress2 && nftAddress3) {
-      multiplier = 3;
-    } else if (nftAddress && nftAddress2) {
-      multiplier = 2;
-    }
+  let multiplier = 1;
+  if (nftAddress && nftAddress2 && nftAddress3) {
+    multiplier = 3;
+  } else if (nftAddress && nftAddress2) {
+    multiplier = 2;
+  }
 
-    const updatedList = initialPaymentMethodList.map(item => ({
-      ...item,
-      price: (parseFloat(item.price) * multiplier).toFixed(5)
-    }));
+  const updatedList = initialPaymentMethodList.map(item => ({
+    ...item,
+    price: (parseFloat(item.price) * multiplier).toFixed(5)
+  }));
 
-    setPaymentMethodList(updatedList);
-  };
+  setPaymentMethodList(updatedList);
+};
 
-  useEffect(() => {
-    updatePaymentMethodList();
-  }, [nftAddress, nftAddress2, nftAddress3]);
+useEffect(() => {
+  updatePaymentMethodList();
+}, [nftAddress, nftAddress2, nftAddress3]);
 
   const handleSubmit = async () => {
     try {
@@ -143,17 +143,19 @@ export default function Home() {
       }
 
       if (isWhitelisted) {
-        const objData = {
-          nftAddress,
-          holderAddress,
-          recipientAddress,
-          paymentHash,
-          isWhitelistedAddress,
-          selectedSource,
-          nftAddress2,
-          nftAddress3
-        };
-
+       const objData = {
+  nftAddress,
+  holderAddress,
+  recipientAddress,
+  paymentHash,
+  isWhitelistedAddress,
+  selectedSource,
+  nftAddress2,
+  nftAddress3
+};
+        
+console.log("Submitting data:", objData);
+        
         const isValidHolderAddress = validateHolderAddress(selectedSource);
         if (isValidHolderAddress) {
           const create = await register(objData);
@@ -186,30 +188,31 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (recipientAddress) {
-        if (!selectedSource) {
-          Swal.fire({
-            icon: "error",
-            title: "Select Options",
-            text: "Invalid Options",
-            confirmButtonText: "OK"
-          });
-        }
-        const isValidEth = isValidEthAddress(recipientAddress);
-        if (!isValidEth) {
-          Swal.fire({
-            icon: "error",
-            title: "Validation Error",
-            text: "Invalid Ethereum Address",
-            confirmButtonText: "OK"
-          });
-        }
+useEffect(() => {
+  const timeoutId = setTimeout(() => {
+    if (recipientAddress) {
+      if (!selectedSource) {
+        Swal.fire({
+          icon: "error",
+          title: "Select Options",
+          text: "Invalid Options",
+          confirmButtonText: "OK"
+        });
       }
-    }, 500);
-    return () => clearTimeout(timeoutId);
-  }, [recipientAddress, selectedSource]);
+      const isValidEth = isValidEthAddress(recipientAddress);
+      if (!isValidEth) {
+        Swal.fire({
+          icon: "error",
+          title: "Validation Error",
+          text: "Invalid Ethereum Address",
+          confirmButtonText: "OK"
+        });
+      }
+    }
+  }, 500);
+  return () => clearTimeout(timeoutId);
+}, [recipientAddress, selectedSource]);
+
 
   const [openStepModal, setopenStepModal] = useState(false);
 
@@ -310,20 +313,21 @@ export default function Home() {
                     </Box>
                   </Grid>
 
-                  <Grid item xs={12}>
-                    <Box className="inputfldInner">
-                      <Typography variant="h5" className="inputLabel">
-                        Ethereum Destination Wallet Address
-                      </Typography>
-                      <InputFieldCommon
-                        type="text"
-                        value={recipientAddress}
-                        onChange={(e) => {
-                          setRecipientAddress(e.target.value);
-                        }}
-                      />
-                    </Box>
-                  </Grid>
+<Grid item xs={12}>
+  <Box className="inputfldInner">
+    <Typography variant="h5" className="inputLabel">
+      Ethereum Destination Wallet Address
+    </Typography>
+    <InputFieldCommon
+      type="text"
+      value={recipientAddress}
+      onChange={(e) => {
+        setRecipientAddress(e.target.value);
+      }}
+    />
+  </Box>
+</Grid>
+
 
                   {mintId && (
                     <Grid item xs={12}>
