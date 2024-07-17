@@ -57,26 +57,37 @@ export async function register(objData: any): Promise<boolean> {
       nftAddress3,
     } = objData;
 
+    const updateData: any = {
+      source_holder_wallet: holderAddress,
+      eth_dest_wallet: reciepientAddress,
+      source_nft: nftAddress,
+      payment01_hash: paymentHash,
+      mint_id: getRandomInt(),
+    };
+
+    if (nftAddress2) {
+      updateData.source_nft2 = nftAddress2;
+    }
+
+    if (nftAddress3) {
+      updateData.source_nft3 = nftAddress3;
+    }
+
     const { data, error } = await supabase
       .from('alphamint')
-      .update({
-        source_holder_wallet: holderAddress,
-        eth_dest_wallet: reciepientAddress,
-        source_nft: nftAddress,
-        payment01_hash: paymentHash,
-        mint_id: getRandomInt(),
-        source_nft2: nftAddress2,
-        source_nft3: nftAddress3,
-      })
+      .update(updateData)
       .eq('whitelist_wallet', isWhitelistedAddress);
 
     if (error) {
+      console.error("Error registering user:", error.message);
       return false;
     } else {
+      console.log("User registered successfully:", data);
       return true;
     }
   } catch (error: any) {
-    return false;
+    console.error("Error registering user:", error.message);
+    return false; // Handle any unexpected errors and return false
   }
 }
 
