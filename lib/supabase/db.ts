@@ -2,15 +2,13 @@
 import { supabase } from "./supabase";
 
 interface AlphamintData {
-  id?: string;
-  whitelist_wallet?: string;
-  source_holder_wallet?: string;
-  eth_dest_wallet?: string;
-  source_nft?: string;
-  source_nft2?: string;
-  source_nft3?: string;
-  payment01_hash?: string;
-  mint_id?: number;
+  nftAddress: string;
+  holderAddress: string;
+  recipientAddress: string;
+  paymentHash: string;
+  isWhitelistedAddress: string;
+  nftAddress2?: string;
+  nftAddress3?: string;
 }
 
 export async function addWalletAddress(walletAddress: string) {
