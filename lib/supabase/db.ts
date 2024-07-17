@@ -1,6 +1,18 @@
 // utils/db.ts
 import { supabase } from "./supabase";
 
+interface AlphamintData {
+  id?: string;
+  whitelist_wallet?: string;
+  source_holder_wallet?: string;
+  eth_dest_wallet?: string;
+  source_nft?: string;
+  source_nft2?: string;
+  source_nft3?: string;
+  payment01_hash?: string;
+  mint_id?: number;
+}
+
 export async function addWalletAddress(walletAddress: string) {
   try {
     const { data, error } = await supabase
@@ -21,7 +33,7 @@ export const isAddressWhitelisted = async (address: string) => {
   try {
     const trimmedAddress = address.trim();
     const { data, error } = await supabase
-      .from("alphamint")
+      .from<AlphamintData>("alphamint")
       .select("id")
       .eq("whitelist_wallet", trimmedAddress);
 
@@ -45,7 +57,7 @@ function getRandomInt() {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export async function register(objData: any): Promise<boolean> {
+export async function register(objData: AlphamintData): Promise<boolean> {
   try {
     const {
       nftAddress,
@@ -64,27 +76,24 @@ export async function register(objData: any): Promise<boolean> {
         eth_dest_wallet: recipientAddress,
         source_nft: nftAddress,
         payment01_hash: paymentHash,
-        source_nft2: nftAddress2 || null, // Set to null if not provided
-        source_nft3: nftAddress3 || null, // Set to null if not provided
+        source_nft2: nftAddress2 || null,
+        source_nft3: nftAddress3 || null,
         mint_id: getRandomInt()
       })
       .eq('whitelist_wallet', isWhitelistedAddress);
 
     if (error) {
-      // eslint-disable-next-line no-console
       console.error("Error registering user:", error.message);
       return false;
     }
 
     if (!data || data.length === 0) {
-      // eslint-disable-next-line no-console
       console.log("No rows updated.");
       return false;
     }
 
     return true;
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error("Error registering user:", error.message);
     return false;
   }
@@ -93,26 +102,23 @@ export async function register(objData: any): Promise<boolean> {
 export async function fetchLatestMintId(walletAddress: string) {
   try {
     const { data, error } = await supabase
-      .from('alphamint')
+      .from<AlphamintData>('alphamint')
       .select('mint_id')
       .eq('whitelist_wallet', walletAddress)
       .order('mint_id', { ascending: false })
       .limit(1);
 
     if (error) {
-      // eslint-disable-next-line no-console
       console.error('Error fetching latest mint_id:', error.message);
       return null;
     }
     if (data && data.length > 0) {
       return data[0].mint_id;
     } else {
-      // eslint-disable-next-line no-console
       console.log('No mint_id found for the given wallet address.');
       return null;
     }
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error('Error fetching latest mint_id:', error.message);
     return null;
   }
@@ -121,12 +127,11 @@ export async function fetchLatestMintId(walletAddress: string) {
 export const checkWalletAddress = async (address: string): Promise<boolean> => {
   try {
     const { data, error } = await supabase
-      .from('alphamint')
+      .from<AlphamintData>('alphamint')
       .select('source_holder_wallet')
       .eq('whitelist_wallet', address);
 
     if (error) {
-      // eslint-disable-next-line no-console
       console.error("Error checking wallet address:", error.message);
       return false;
     }
@@ -137,7 +142,6 @@ export const checkWalletAddress = async (address: string): Promise<boolean> => {
 
     return false;
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error("Unexpected error checking wallet address:", error.message);
     return false;
   }
