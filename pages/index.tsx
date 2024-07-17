@@ -17,7 +17,7 @@ import Grid from "@mui/material/Grid";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableRow from "@mui/material/TableRow";
+import TableRow from "@mui.material/TableRow";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -267,7 +267,7 @@ export default function Home() {
                         Ordinals: Inscription number <br />
                         ETH/SOL NFTS: NFT Address
                       </p>
-                     <div className="arrow" id="arrow1" />
+                      <div className="arrow" id="arrow1" />
                     </div>
                   </Grid>
 
@@ -284,14 +284,6 @@ export default function Home() {
                         }}
                       />
                     </Box>
-                    <div className="floating-box" id="box2">
-                      <p>
-                        Post here the wallet in which your <br />
-                        in which your NFTs/Ordinals <br />
-                        are stored.
-                      </p>
-                      <div className="arrow" id="arrow2" />
-                    </div>
                   </Grid>
 
                   <Grid item xs={12}>
@@ -307,14 +299,6 @@ export default function Home() {
                         }}
                       />
                     </Box>
-                    <div className="floating-box" id="box3">
-                      <p>
-                        Next paste your Ethereum wallet.<br />
-                        We will send the 3D avatar here.
-                    
-                      </p>
-                      <div className="arrow" id="arrow3" />
-                    </div>
                   </Grid>
 
                   <Grid item xs={12}>
@@ -330,12 +314,6 @@ export default function Home() {
                         }}
                       />
                     </Box>
-                    <div className="floating-box" id="box4">
-                      <p>
-                        Now post the Wallet address, where your ordinals are stored in.
-                      </p>
-                   <div className="arrow" id="arrow4" />
-                    </div>
                   </Grid>
 
                   <Grid item xs={12}>
