@@ -81,10 +81,10 @@ export async function register(objData: any): Promise<boolean> {
     if (error) {
       console.error("Error registering user:", error.message);
       return false;
-    } else {
-      console.log("User registered successfully:", data);
-      return true;
     }
+
+    console.log("User registered successfully:", data);  // Log the data to use the variable
+    return true;
   } catch (error: any) {
     console.error("Error registering user:", error.message);
     return false; // Handle any unexpected errors and return false
