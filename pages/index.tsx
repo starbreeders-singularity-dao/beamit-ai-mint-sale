@@ -30,7 +30,6 @@ import { List, ListItem } from "@mui/material";
 import { paymentMethodList as initialPaymentMethodList } from "@/json/mock/paymentMethodList.mock";
 import ProtectedRoute from "../components/Authentication/ProtectedRoute";
 
-
 export default function Home() {
   const router = useRouter();
   const [nftAddress, setNftAddress] = useState("");
@@ -51,22 +50,21 @@ export default function Home() {
     return isAddress(address);
   }
 
-function validateHolderAddress(selectedSource: any): boolean {
-  try {
-    if (selectedSource === "BTC Ordinal") {
-      return true;
-    } else if (selectedSource === "ETH NFT") {
-      return true;
-    } else if (selectedSource === "Solana NFT") {
-      return true;
-    } else {
+  function validateHolderAddress(selectedSource: any): boolean {
+    try {
+      if (selectedSource === "BTC Ordinal") {
+        return true;
+      } else if (selectedSource === "ETH NFT") {
+        return true;
+      } else if (selectedSource === "Solana NFT") {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error: any) {
       return false;
     }
-  } catch (error: any) {
-    return false;
   }
-}
-
 
   const handleLogout = () => {
     try {
@@ -75,7 +73,9 @@ function validateHolderAddress(selectedSource: any): boolean {
         localStorage.removeItem("whiteListAddress");
         router.push("/auth/login");
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
   };
 
   const updatePaymentMethodList = () => {
@@ -101,6 +101,10 @@ function validateHolderAddress(selectedSource: any): boolean {
   const handleSubmit = async () => {
     try {
       const isWhitelistedAddress = localStorage.getItem("whiteListAddress");
+      if (!isWhitelistedAddress) {
+        throw new Error("No whitelisted address found");
+      }
+
       const isWhitelisted = await isAddressWhitelisted(isWhitelistedAddress);
       const checkWalletAlreadyPresent = await checkWalletAddress(isWhitelistedAddress);
 
@@ -177,6 +181,7 @@ function validateHolderAddress(selectedSource: any): boolean {
 
       return true;
     } catch (error) {
+      console.error("Error during submission:", error);
       return false;
     }
   };
@@ -187,8 +192,8 @@ function validateHolderAddress(selectedSource: any): boolean {
         if (!selectedSource) {
           Swal.fire({
             icon: "error",
-            title: "Select  Options",
-            text: "Invalid  Options",
+            title: "Select Options",
+            text: "Invalid Options",
             confirmButtonText: "OK"
           });
         }
@@ -204,7 +209,7 @@ function validateHolderAddress(selectedSource: any): boolean {
       }
     }, 500);
     return () => clearTimeout(timeoutId);
-  }, [reciepientAddress]);
+  }, [reciepientAddress, selectedSource]);
 
   const [openStepModal, setopenStepModal] = useState(false);
 
