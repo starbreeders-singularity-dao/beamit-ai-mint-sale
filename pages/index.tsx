@@ -228,10 +228,10 @@ export default function Home() {
 
                 <Box className="homeSourceWrapRt">
                   <Box className="homeSourceChckbx">
-                    {checkedSource.map((item, index) => (
+                    {checkedSource.map((item) => (
                       <CommonRadio
                         name="source"
-                        key={index}
+                        key={item?.id} // Assuming `id` is a unique identifier in `item`
                         label={item?.name}
                         value={item?.value}
                         checked={selectedSource === item?.value}
@@ -389,8 +389,8 @@ export default function Home() {
                         <Box className="paymentAdressTable">
                           <Table>
                             <TableBody>
-                              {paymentMethodList.map((item, index) => (
-                                <TableRow key={index}>
+                              {paymentMethodList.map((item) => (
+                                <TableRow key={item?.id}> {/* Assuming `id` is a unique identifier in `item` */}
                                   <TableCell component="td" scope="row">
                                     <Box className="paymentInfoInner">
                                       <Box className="coinName">
