@@ -76,7 +76,7 @@ export async function register(objData: any): Promise<boolean> {
       return false;
     }
 
-    if (data.length === 0) {
+    if (!data || data.length === 0) {
       // eslint-disable-next-line no-console
       console.log("No rows updated.");
       return false;
