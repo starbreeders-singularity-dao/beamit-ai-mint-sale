@@ -263,9 +263,9 @@ export default function Home() {
                     </Box>
                     <div className="floating-box" id="box1">
                       <p>
+                        Now put your PFP NFTs/Ordinals ID here.<br />
                         Ordinals: Inscription number <br />
-                        ETH/SOL NFT: NFT Address <br />
-                        Choose up to 3 PFP to mint 3D Avatars!
+                        ETH/SOL NFTS: NFT Address
                       </p>
                      <div className="arrow" id="arrow1" />
                     </div>
@@ -286,9 +286,9 @@ export default function Home() {
                     </Box>
                     <div className="floating-box" id="box2">
                       <p>
-                        Ordinals: Inscription number <br />
-                        ETH/SOL NFT: NFT Address <br />
-                        Choose up to 3 PFP to mint 3D Avatars!
+                        Post here the wallet in which your <br />
+                        in which your NFTs/Ordinals <br />
+                        are stored.
                       </p>
                       <div className="arrow" id="arrow2" />
                     </div>
@@ -309,9 +309,9 @@ export default function Home() {
                     </Box>
                     <div className="floating-box" id="box3">
                       <p>
-                        Ordinals: Inscription number <br />
-                        ETH/SOL NFT: NFT Address <br />
-                        Choose up to 3 PFP to mint 3D Avatars!
+                        Next paste your Ethereum wallet.<br />
+                        We will send the 3D avatar here.
+                    
                       </p>
                       <div className="arrow" id="arrow3" />
                     </div>
