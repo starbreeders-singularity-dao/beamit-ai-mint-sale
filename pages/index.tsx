@@ -52,9 +52,9 @@ export default function Home() {
 };
 
 
-  function isValidEthAddress(address) {
-    return isAddress(address);
-  }
+function isValidEthAddress(address: string) {
+  return isAddress(address);
+}
 
   function validateHolderAddress(selectedSource) {
     try {
