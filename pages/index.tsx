@@ -45,18 +45,15 @@ export default function Home() {
   const [paymentMethodList, setPaymentMethodList] = useState(initialPaymentMethodList);
   const [openStepModal, setOpenStepModal] = useState(false);
 
-
-
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  setSelectedSource(event.target.value);
-};
+    setSelectedSource(event.target.value);
+  };
 
+  function isValidEthAddress(address: string) {
+    return isAddress(address);
+  }
 
-function isValidEthAddress(address: string) {
-  return isAddress(address);
-}
-
-  function validateHolderAddress(selectedSource) {
+  function validateHolderAddress(selectedSource: string) {
     try {
       if (selectedSource === "BTC Ordinal" || selectedSource === "ETH NFT" || selectedSource === "Solana NFT") {
         return true;
