@@ -282,7 +282,7 @@ export default function Home() {
                   {showNFTAddressText && (
                     <Grid item xs={12}>
                       <Typography variant="body2" style={{ color: '#ff00f2', textAlign: 'left' }}>
-                        Now pick your favourite PFP you want to beam into a 3D avatar. Paste its NFT Address or Ordinals Inscription number here.
+                        Now pick your favourite PFP you want to beam into a 3D avatar. Paste its NFT Address / Ordinals Inscription number or Marketplace link below.
                       </Typography>
                     </Grid>
                   )}
@@ -290,7 +290,7 @@ export default function Home() {
                   <Grid item xs={12}>
                     <Box className="inputfldInner">
                       <Typography variant="h5" className="inputLabel">
-                        Source PFP NFT Address/ Ordinals Inscription ID
+                        Source PFP NFT/Ordinal
                       </Typography>
                       <InputFieldCommon
                         type="text"
@@ -315,7 +315,7 @@ export default function Home() {
                   <Grid item xs={12}>
                     <Box className="inputfldInner">
                       <Typography variant="h5" className="inputLabel">
-                        2nd Source PFP NFT Address/ Ordinals Inscription ID
+                        2nd source PFP NFT/Ordinal
                       </Typography>
                       <InputFieldCommon
                         type="text"
@@ -330,7 +330,7 @@ export default function Home() {
                   <Grid item xs={12}>
                     <Box className="inputfldInner">
                       <Typography variant="h5" className="inputLabel">
-                        3rd Source PFP NFT Address/ Ordinals Inscription ID
+                        3rd PFP NFT/Ordinal
                       </Typography>
                       <InputFieldCommon
                         type="text"
@@ -391,8 +391,7 @@ export default function Home() {
                         <Typography variant="body1">
                           Congratulations for attending the Beamit AI Alphamint!
                           Given your payment and information was entered
-                          correctly, your 3D Avatar will be mintable within 10
-                          days on{" "}
+                          correctly, your 3D Avatar will be ready right after the sale ended on{" "}
                           <Link href="http://alphamint.beamit.space.">
                             http://alphamint.beamit.space.
                           </Link>
@@ -415,7 +414,7 @@ export default function Home() {
                       <Box className="paymentAdress">
                         <Typography variant="h5" className="hdPymnt">
                           Excellent! Now make your payment (payment must be made from source
-                          holder Wallet Address), paste the tx hash, and submit!
+                          holder Wallet Address), paste the tx hash, and submit - done!
                         </Typography>
 
                         <Box className="paymentAdressTable">
