@@ -11,6 +11,7 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Link from "next/link";
+import Image from "next/image";
 
 function Index() {
   const [walletAddress, setWalletAddress] = useState<string>("");
@@ -87,7 +88,7 @@ function Index() {
     <Wrapper imageWrapper={assest?.BackstickyMain2}>
       <header style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 20px', background: 'rgba(0, 0, 0, 0.8)', position: 'fixed', top: 0, zIndex: 1000 }}>
         <Link href="https://beamit.space">
-          <img src="beamit-png.png" alt="BeamIt logo" style={{ height: '50px' }} />
+          <Image src="/beamit-png.png" alt="BeamIt logo" width={50} height={50} />
         </Link>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <Link href="https://docs.google.com/forms/d/1TzmYPtzWh2udYO8RD-ZOSOpSWgewQK_WL4ZaS1UeTb4/viewform?edit_requested=true" passHref>
@@ -104,12 +105,12 @@ function Index() {
           </Link>
           <Link href="https://twitter.com/beamit_ai" passHref>
             <a target="_blank" style={{ marginLeft: '30px' }}>
-              <img src="twitter.png" alt="Twitter" style={{ width: '32px', height: '32px' }} />
+              <Image src="/twitter.png" alt="Twitter" width={32} height={32} />
             </a>
           </Link>
           <Link href="https://discord.gg/f2mcJWwVNw" passHref>
             <a target="_blank" style={{ marginLeft: '30px' }}>
-              <img src="discord.png" alt="Discord" style={{ width: '32px', height: '32px' }} />
+              <Image src="/discord.png" alt="Discord" width={32} height={32} />
             </a>
           </Link>
         </div>
