@@ -63,7 +63,7 @@ export default function Home() {
 
   function validateHolderAddress(selectedSource: string) {
     try {
-      if (selectedSource === "BTC Ordinal" || selectedSource === "ETH NFT" || selectedSource === "Solana NFT") {
+      if (selectedSource === "Bitcoin" || selectedSource === "Ethereum" || selectedSource === "Solana") {
         return true;
       } else {
         return false;
