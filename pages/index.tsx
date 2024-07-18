@@ -1,36 +1,36 @@
 import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
-import { isAddress } from "web3-validator";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import Swal from "sweetalert2";
+import { isAddress } from "web3-validator";
+import {
+  Box,
+  Container,
+  Grid,
+  List,
+  ListItem,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Typography,
+} from "@mui/material";
+import CommonRadio from "@/components/CommonChecked/CommonRadio";
+import ProtectedRoute from "@/components/Authentication/ProtectedRoute";
+import assest from "@/json/assest";
+import { checkedSource } from "@/json/mock/checkedSource.mock";
+import { paymentMethodList as initialPaymentMethodList } from "@/json/mock/paymentMethodList.mock";
+import Wrapper from "@/layout/wrapper/Wrapper";
+import { HomePageStyled } from "@/styles/StyledComponents/HomePageStyled";
+import InputFieldCommon from "@/ui/CommonInput/CommonInput";
+import CustomButtonPrimary from "@/ui/CustomButtons/CustomButtonPrimary";
+import MuiModalWrapper from "@/ui/Modal/MuiModalWrapper";
 import {
   checkWalletAddress,
   fetchLatestMintId,
   isAddressWhitelisted,
   register,
 } from "@/lib/supabase/db";
-import {
-  Box,
-  Container,
-  Grid,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  Typography,
-  List,
-  ListItem,
-} from "@mui/material";
-import CommonRadio from "@/components/CommonChecked/CommonRadio";
-import assest from "@/json/assest";
-import { checkedSource } from "@/json/mock/checkedSource.mock";
-import Wrapper from "@/layout/wrapper/Wrapper";
-import { HomePageStyled } from "@/styles/StyledComponents/HomePageStyled";
-import InputFieldCommon from "@/ui/CommonInput/CommonInput";
-import CustomButtonPrimary from "@/ui/CustomButtons/CustomButtonPrimary";
-import MuiModalWrapper from "@/ui/Modal/MuiModalWrapper";
-import { paymentMethodList as initialPaymentMethodList } from "@/json/mock/paymentMethodList.mock";
-import ProtectedRoute from "../components/Authentication/ProtectedRoute";
 
 export default function Home() {
   const router = useRouter();
@@ -43,7 +43,7 @@ export default function Home() {
   const [nftAddress2, setNftAddress2] = useState("");
   const [nftAddress3, setNftAddress3] = useState("");
   const [paymentMethodList, setPaymentMethodList] = useState(initialPaymentMethodList);
-  const [openStepModal, setopenStepModal] = useState(false);
+  const [openStepModal, setOpenStepModal] = useState(false);
 
   const handleRadioChange = (event) => {
     setSelectedSource(event.target.value);
@@ -55,11 +55,7 @@ export default function Home() {
 
   function validateHolderAddress(selectedSource) {
     try {
-      if (selectedSource === "BTC Ordinal") {
-        return true;
-      } else if (selectedSource === "ETH NFT") {
-        return true;
-      } else if (selectedSource === "Solana NFT") {
+      if (selectedSource === "BTC Ordinal" || selectedSource === "ETH NFT" || selectedSource === "Solana NFT") {
         return true;
       } else {
         return false;
@@ -235,14 +231,6 @@ export default function Home() {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (nftAddress) {
-        if (!selectedSource) {
-          Swal.fire({
-            icon: "error",
-            title: "Select Options",
-            text: "Invalid Options",
-            confirmButtonText: "OK",
-          });
-        }
         if (!nftAddress) {
           Swal.fire({
             icon: "error",
@@ -254,10 +242,10 @@ export default function Home() {
       }
     }, 500);
     return () => clearTimeout(timeoutId);
-  }, [nftAddress, selectedSource]);
+  }, [nftAddress]);
 
   const handleStepModalClose = () => {
-    setopenStepModal(false);
+    setOpenStepModal(false);
   };
 
   return (
@@ -273,10 +261,10 @@ export default function Home() {
 
                 <Box className="homeSourceWrapRt">
                   <Box className="homeSourceChckbx">
-                    {checkedSource.map((item, index) => (
+                    {checkedSource.map((item) => (
                       <CommonRadio
                         name="source"
-                        key={index}
+                        key={item.value} // Use unique value as key
                         label={item?.name}
                         value={item?.value}
                         checked={selectedSource === item?.value}
@@ -410,8 +398,8 @@ export default function Home() {
                         <Box className="paymentAdressTable">
                           <Table>
                             <TableBody>
-                              {paymentMethodList.map((item, index) => (
-                                <TableRow key={index}>
+                              {paymentMethodList.map((item) => (
+                                <TableRow key={item.value}> {/* Use unique value as key */}
                                   <TableCell component="td" scope="row">
                                     <Box className="paymentInfoInner">
                                       <Box className="coinName">
@@ -444,21 +432,20 @@ export default function Home() {
                     " "
                   )}
 
-<Grid item xs={12}>
-  <Box className="inputfldInner">
-    <Typography variant="h4" className="inputLabel">
-      Payment Transaction Hash
-    </Typography>
-    <InputFieldCommon
-      type="text"
-      value={paymentHash}
-      onChange={(e) => {
-        setPaymentHash(e.target.value);
-      }}
-    />
-  </Box>
-</Grid>
-
+                  <Grid item xs={12}>
+                    <Box className="inputfldInner">
+                      <Typography variant="h4" className="inputLabel">
+                        Payment Transaction Hash
+                      </Typography>
+                      <InputFieldCommon
+                        type="text"
+                        value={paymentHash}
+                        onChange={(e) => {
+                          setPaymentHash(e.target.value);
+                        }}
+                      />
+                    </Box>
+                  </Grid>
 
                   <Grid item xs={12} sx={{ textAlign: "center" }}>
                     <List className="submitBtnLtt">
