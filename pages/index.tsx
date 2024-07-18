@@ -46,6 +46,7 @@ export default function Home() {
   const [openStepModal, setOpenStepModal] = useState(false);
   const [showNFTAddressText, setShowNFTAddressText] = useState(false);
   const [showPopupMessage, setShowPopupMessage] = useState(false);
+  const [showHolderPopupMessage, setShowHolderPopupMessage] = useState(false);
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedSource(event.target.value);
@@ -292,37 +293,36 @@ export default function Home() {
                 >
                   {showNFTAddressText && (
                     <Grid item xs={12}>
-                      <Typography variant="body2" style={{ color: '#ff00f2' }}>
+                      <Typography variant="body2" style={{ color: '#ff00f2', textAlign: 'left' }}>
                         Now pick the PFP you want to beam into a 3D avatar. Paste its NFT Address or Ordinals Inscription number here.
                       </Typography>
                     </Grid>
                   )}
 
-                 <Grid item xs={12}>
-  <Box className="inputfldInner">
-    <Typography variant="h5" className="inputLabel">
-      Source PFP NFT Address/ Ordinals Inscription ID
-    </Typography>
-    <InputFieldCommon
-      type="text"
-      value={nftAddress}
-      onChange={(e) => {
-        setNftAddress(e.target.value);
-        if (e.target.value) {
-          setShowPopupMessage(true);
-        } else {
-          setShowPopupMessage(false);
-        }
-      }}
-    />
-    {showPopupMessage && (
-      <Typography variant="body2" style={{ color: '#ff00f2', marginTop: '8px' }}>
-        You can pick 2 more! It&#39;s only 10 USD each.
-      </Typography>
-    )}
-  </Box>
-</Grid>
-
+                  <Grid item xs={12}>
+                    <Box className="inputfldInner">
+                      <Typography variant="h5" className="inputLabel">
+                        Source PFP NFT Address/ Ordinals Inscription ID
+                      </Typography>
+                      <InputFieldCommon
+                        type="text"
+                        value={nftAddress}
+                        onChange={(e) => {
+                          setNftAddress(e.target.value);
+                          if (e.target.value) {
+                            setShowPopupMessage(true);
+                          } else {
+                            setShowPopupMessage(false);
+                          }
+                        }}
+                      />
+                      {showPopupMessage && (
+                        <Typography variant="body2" style={{ color: '#ff00f2', textAlign: 'left', marginTop: '8px' }}>
+                          You can pick 2 more! It&#39;s only 10 USD each.
+                        </Typography>
+                      )}
+                    </Box>
+                  </Grid>
 
                   <Grid item xs={12}>
                     <Box className="inputfldInner">
@@ -367,8 +367,18 @@ export default function Home() {
                         value={holderAddress}
                         onChange={(e) => {
                           setHolderAddress(e.target.value);
+                          if (e.target.value) {
+                            setShowHolderPopupMessage(true);
+                          } else {
+                            setShowHolderPopupMessage(false);
+                          }
                         }}
                       />
+                      {showHolderPopupMessage && (
+                        <Typography variant="body2" style={{ color: '#ff00f2', textAlign: 'left', marginTop: '8px' }}>
+                          Now paste the Ethereum wallet, where you want to receive your 3D Avatars below:
+                        </Typography>
+                      )}
                     </Box>
                   </Grid>
 
