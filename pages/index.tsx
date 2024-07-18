@@ -414,7 +414,7 @@ export default function Home() {
                       <Box className="paymentAdress">
                         <Typography variant="h5" className="hdPymnt">
                           Excellent! Now make your payment (payment must be made from source
-                          holder Wallet Address), paste the tx hash, and submit - done!
+                          holder Wallet Address), paste the tx hash, and submit - done! With submitting the payment you confirm to agree to our terms and conditions as linked on beamit.space.
                         </Typography>
 
                         <Box className="paymentAdressTable">
