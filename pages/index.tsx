@@ -440,9 +440,10 @@ export default function Home() {
                                       <Box className="coinName">
                                         {item?.name}
                                       </Box>
-                                      <Box className="coinPrice">
-                                        {item?.price}
-                                      </Box>
+                                     <Box className="coinPrice" style={{ color: '#00ffff' }}>
+  {item?.price}
+</Box>
+
                                       <Box className="coinValue">
                                         {item?.value}
                                       </Box>
