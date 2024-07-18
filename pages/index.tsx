@@ -44,9 +44,15 @@ export default function Home() {
   const [nftAddress3, setNftAddress3] = useState("");
   const [paymentMethodList, setPaymentMethodList] = useState(initialPaymentMethodList);
   const [openStepModal, setOpenStepModal] = useState(false);
+  const [showNFTAddressText, setShowNFTAddressText] = useState(false);
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedSource(event.target.value);
+    if (["BTC Ordinal", "ETH NFT", "Solana NFT"].includes(event.target.value)) {
+      setShowNFTAddressText(true);
+    } else {
+      setShowNFTAddressText(false);
+    }
   };
 
   function isValidEthAddress(address: string) {
@@ -256,7 +262,9 @@ export default function Home() {
             <Container fixed>
               <Box className="homeSourceWrapTop">
                 <Box className="homeSourceWrapLf">
-                  <Typography variant="body1">Source PFP:</Typography>
+                  <Typography variant="body1" style={{ color: '#ff00f2' }}>
+                    Pick source chain of your PFP:
+                  </Typography>
                 </Box>
 
                 <Box className="homeSourceWrapRt">
@@ -281,13 +289,18 @@ export default function Home() {
                   rowSpacing={{ xs: 2, sm: 3, md: 4 }}
                   columnSpacing={{ xs: 1, sm: 2 }}
                 >
+                  {showNFTAddressText && (
+                    <Grid item xs={12}>
+                      <Typography variant="body2" style={{ color: '#ff00f2' }}>
+                        Now pick the PFP you want to beam into a 3D avatar. Paste its NFT Address or Ordinals Inscription number here.
+                      </Typography>
+                    </Grid>
+                  )}
+
                   <Grid item xs={12}>
                     <Box className="inputfldInner">
                       <Typography variant="h5" className="inputLabel">
                         Source PFP NFT Address/ Ordinals Inscription ID
-                      </Typography>
-                      <Typography variant="body2" style={{ color: '#ff00f2' }}>
-                        Pick the PFP you want to beam into a 3D avatar. Paste NFT Address or Ordinals Inscription number here.
                       </Typography>
                       <InputFieldCommon
                         type="text"
