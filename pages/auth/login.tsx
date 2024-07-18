@@ -85,6 +85,10 @@ function Index() {
     <Wrapper imageWrapper={assest?.BackstickyMain2}>
       <Container fixed>
         <AuthStyled>
+          <Box sx={{ textAlign: "center", marginBottom: "50px" }}>
+            <div style={{ fontSize: "20px", color: "#ff00f2" }}>Guaranteed Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span></div>
+            <div style={{ fontSize: "20px", color: "#ff00f2" }}>FCFS Whitelist access: <span style={{ color: "#00ffff" }}>{countdown}</span></div>
+          </Box>
           <Box className="capchaLoginSectn">
             <Grid
               container
@@ -122,10 +126,6 @@ function Index() {
                 </CustomButtonPrimary>
               </Grid>
             </Grid>
-          </Box>
-          <Box sx={{ textAlign: "center", marginTop: "50px" }}>
-            <div style={{ fontSize: "28px", color: "#ff00f2" }}>Guaranteed Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span></div>
-            <div style={{ fontSize: "28px", color: "#ff00f2" }}>FCFS Whitelist access: <span style={{ color: "#00ffff" }}>{countdown}</span></div>
           </Box>
         </AuthStyled>
       </Container>
