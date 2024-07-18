@@ -45,6 +45,7 @@ export default function Home() {
   const [paymentMethodList, setPaymentMethodList] = useState(initialPaymentMethodList);
   const [openStepModal, setOpenStepModal] = useState(false);
   const [showNFTAddressText, setShowNFTAddressText] = useState(false);
+  const [showPopupMessage, setShowPopupMessage] = useState(false);
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedSource(event.target.value);
@@ -307,8 +308,18 @@ export default function Home() {
                         value={nftAddress}
                         onChange={(e) => {
                           setNftAddress(e.target.value);
+                          if (e.target.value) {
+                            setShowPopupMessage(true);
+                          } else {
+                            setShowPopupMessage(false);
+                          }
                         }}
                       />
+                      {showPopupMessage && (
+                        <Typography variant="body2" style={{ color: '#ff00f2' }}>
+                          You can pick 2 more! It's only 10 USD each.
+                        </Typography>
+                      )}
                     </Box>
                   </Grid>
 
