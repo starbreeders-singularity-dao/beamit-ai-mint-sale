@@ -45,9 +45,12 @@ export default function Home() {
   const [paymentMethodList, setPaymentMethodList] = useState(initialPaymentMethodList);
   const [openStepModal, setOpenStepModal] = useState(false);
 
-  const handleRadioChange = (event) => {
-    setSelectedSource(event.target.value);
-  };
+
+
+  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  setSelectedSource(event.target.value);
+};
+
 
   function isValidEthAddress(address) {
     return isAddress(address);
