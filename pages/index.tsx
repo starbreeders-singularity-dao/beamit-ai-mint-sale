@@ -294,7 +294,7 @@ export default function Home() {
                   {showNFTAddressText && (
                     <Grid item xs={12}>
                       <Typography variant="body2" style={{ color: '#ff00f2', textAlign: 'left' }}>
-                        Now pick the PFP you want to beam into a 3D avatar. Paste its NFT Address or Ordinals Inscription number here.
+                        Now pick your favourite PFP you want to beam into a 3D avatar. Paste its NFT Address or Ordinals Inscription number below.
                       </Typography>
                     </Grid>
                   )}
@@ -318,7 +318,7 @@ export default function Home() {
                       />
                       {showPopupMessage && (
                         <Typography variant="body2" style={{ color: '#ff00f2', textAlign: 'left', marginTop: '8px' }}>
-                          You can pick 2 more! It&#39;s only 10 USD each.
+                          Awesome! Btw you can pick 2 more below! It&#39;s only 10 USD for each 3D avatar.
                         </Typography>
                       )}
                     </Box>
@@ -359,8 +359,8 @@ export default function Home() {
                       <Typography variant="h5" className="inputLabel">
                         Source Holder Wallet Address
                       </Typography>
-                      <Typography variant="body2" style={{ color: '#ff00f2' }}>
-                        Paste the wallet that is holding your NFTs / Ordinals here.
+                      <Typography variant="body2" style={{ color: '#ff00f2', textAlign: 'left', marginTop: '8px'}}>
+                        Now paste the wallet that is holding your NFTs / Ordinals here.
                       </Typography>
                       <InputFieldCommon
                         type="text"
@@ -376,7 +376,7 @@ export default function Home() {
                       />
                       {showHolderPopupMessage && (
                         <Typography variant="body2" style={{ color: '#ff00f2', textAlign: 'left', marginTop: '8px' }}>
-                          Now paste the Ethereum wallet, where you want to receive your 3D Avatars below:
+                          Got it. Now paste your Ethereum wallet below. The one where you want to receive your 3D Avatars.
                         </Typography>
                       )}
                     </Box>
@@ -426,7 +426,7 @@ export default function Home() {
                     <Grid item xs={12}>
                       <Box className="paymentAdress">
                         <Typography variant="h5" className="hdPymnt">
-                          Make your payment (payment must be made from source
+                          Excellent! Now make your payment (payment must be made from source
                           holder Wallet Address):
                         </Typography>
 
