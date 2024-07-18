@@ -219,21 +219,11 @@ export default function Home() {
   }, [recipientAddress, selectedSource]);
 
   // Validation for holderAddress
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (holderAddress) {
-        if (!isValidEthAddress(holderAddress)) {
-          Swal.fire({
-            icon: "error",
-            title: "Validation Error",
-            text: "Paste the wallet that is holding your NFTs / Ordinals here.",
-            confirmButtonText: "OK",
-          });
-        }
-      }
-    }, 500);
-    return () => clearTimeout(timeoutId);
-  }, [holderAddress]);
+// Validation for holderAddress - removed to prevent the popup from showing
+useEffect(() => {
+  // Removed validation code
+}, [holderAddress]);
+
 
   // Validation for nftAddress
   useEffect(() => {
@@ -342,7 +332,7 @@ export default function Home() {
                   <Grid item xs={12}>
                     <Box className="inputfldInner">
                       <Typography variant="h5" className="inputLabel">
-                        2nd PFP NFT/Ordinal
+                        3rd PFP NFT/Ordinal
                       </Typography>
                       <InputFieldCommon
                         type="text"
