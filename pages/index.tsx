@@ -298,30 +298,31 @@ export default function Home() {
                     </Grid>
                   )}
 
-                  <Grid item xs={12}>
-                    <Box className="inputfldInner">
-                      <Typography variant="h5" className="inputLabel">
-                        Source PFP NFT Address/ Ordinals Inscription ID
-                      </Typography>
-                      <InputFieldCommon
-                        type="text"
-                        value={nftAddress}
-                        onChange={(e) => {
-                          setNftAddress(e.target.value);
-                          if (e.target.value) {
-                            setShowPopupMessage(true);
-                          } else {
-                            setShowPopupMessage(false);
-                          }
-                        }}
-                      />
-                      {showPopupMessage && (
-                        <Typography variant="body2" style={{ color: '#ff00f2', textAlign: 'left' }}>
-    You can pick 2 more! It&#39;s only 10 USD each.
-  </Typography>
-                      )}
-                    </Box>
-                  </Grid>
+                 <Grid item xs={12}>
+  <Box className="inputfldInner">
+    <Typography variant="h5" className="inputLabel">
+      Source PFP NFT Address/ Ordinals Inscription ID
+    </Typography>
+    <InputFieldCommon
+      type="text"
+      value={nftAddress}
+      onChange={(e) => {
+        setNftAddress(e.target.value);
+        if (e.target.value) {
+          setShowPopupMessage(true);
+        } else {
+          setShowPopupMessage(false);
+        }
+      }}
+    />
+    {showPopupMessage && (
+      <Typography variant="body2" style={{ color: '#ff00f2', marginTop: '8px' }}>
+        You can pick 2 more! It&#39;s only 10 USD each.
+      </Typography>
+    )}
+  </Box>
+</Grid>
+
 
                   <Grid item xs={12}>
                     <Box className="inputfldInner">
