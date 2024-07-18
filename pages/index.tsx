@@ -316,9 +316,9 @@ export default function Home() {
                         }}
                       />
                       {showPopupMessage && (
-                        <Typography variant="body2" style={{ color: '#ff00f2' }}>
-                          You can pick 2 more! It is only 10 USD each.
-                        </Typography>
+                        <Typography variant="body2" style={{ color: '#ff00f2', textAlign: 'left' }}>
+    You can pick 2 more! It&#39;s only 10 USD each.
+  </Typography>
                       )}
                     </Box>
                   </Grid>
