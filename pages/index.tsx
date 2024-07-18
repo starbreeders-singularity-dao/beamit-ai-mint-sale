@@ -265,7 +265,7 @@ export default function Home() {
               <Box className="homeSourceWrapTop">
                 <Box className="homeSourceWrapLf">
                   <Typography variant="body1" style={{ color: '#ff00f2' }}>
-                    Pick source chain of your PFP:
+                    Welcome! You made it to the alphamint. Now take your time to enter everything correctly. First pick the source chain of your PFP:
                   </Typography>
                 </Box>
 
