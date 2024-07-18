@@ -308,7 +308,7 @@ useEffect(() => {
                       />
                       {showPopupMessage && (
                         <Typography variant="body2" style={{ color: '#ff00f2', textAlign: 'left', marginTop: '8px' }}>
-                          Awesome! Btw: You can pick 2 more PFP below! It&#39;s only 10 USD for each 3D avatar.
+                          Awesome! Btw: You can pick 2 more PFP below to get more 3D Avatars! It&#39;s only 10 USD each.
                         </Typography>
                       )}
                     </Box>
