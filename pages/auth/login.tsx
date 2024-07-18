@@ -10,6 +10,7 @@ import CustomButtonPrimary from "@/ui/CustomButtons/CustomButtonPrimary";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import Link from "next/link";
 
 function Index() {
   const [walletAddress, setWalletAddress] = useState<string>("");
@@ -17,9 +18,10 @@ function Index() {
   const router = useRouter();
 
   useEffect(() => {
+    const countdownDate = new Date(new Date().getTime() + 48 * 60 * 60 * 1000).getTime(); // 48 hours later
+
     const updateCountdown = () => {
       const now = new Date().getTime();
-      const countdownDate = new Date(now + 48 * 60 * 60 * 1000).getTime(); // 48 hours later
       const distance = countdownDate - now;
 
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -83,9 +85,38 @@ function Index() {
 
   return (
     <Wrapper imageWrapper={assest?.BackstickyMain2}>
+      <header style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 20px', background: 'rgba(0, 0, 0, 0.8)', position: 'fixed', top: 0, zIndex: 1000 }}>
+        <Link href="https://beamit.space">
+          <img src="beamit-png.png" alt="BeamIt logo" style={{ height: '50px' }} />
+        </Link>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Link href="https://docs.google.com/forms/d/1TzmYPtzWh2udYO8RD-ZOSOpSWgewQK_WL4ZaS1UeTb4/viewform?edit_requested=true" passHref>
+            <a target="_blank" style={{ marginLeft: '30px', color: '#ff00f2', textDecoration: 'none', fontSize: '18px' }}>Join Ambassador program</a>
+          </Link>
+          <Link href="https://whitelist.beamit.space/" passHref>
+            <a target="_blank" style={{ marginLeft: '30px', color: '#ff00f2', textDecoration: 'none', fontSize: '18px' }}>Join Alphamint Waitlist</a>
+          </Link>
+          <Link href="https://beamit.space/whitepaper-beamit-ai.pdf" passHref>
+            <a target="_blank" style={{ marginLeft: '30px', color: '#ff00f2', textDecoration: 'none', fontSize: '18px' }}>Whitepaper</a>
+          </Link>
+          <Link href="https://note.com/takabitmap/n/n1bbd5faeb529" passHref>
+            <a target="_blank" style={{ marginLeft: '30px', color: '#ff00f2', textDecoration: 'none', fontSize: '18px' }}>白書</a>
+          </Link>
+          <Link href="https://twitter.com/beamit_ai" passHref>
+            <a target="_blank" style={{ marginLeft: '30px' }}>
+              <img src="twitter.png" alt="Twitter" style={{ width: '32px', height: '32px' }} />
+            </a>
+          </Link>
+          <Link href="https://discord.gg/f2mcJWwVNw" passHref>
+            <a target="_blank" style={{ marginLeft: '30px' }}>
+              <img src="discord.png" alt="Discord" style={{ width: '32px', height: '32px' }} />
+            </a>
+          </Link>
+        </div>
+      </header>
       <Container fixed>
         <AuthStyled>
-          <Box sx={{ textAlign: "center", marginBottom: "50px" }}>
+          <Box sx={{ textAlign: "center", marginTop: "100px", marginBottom: "50px" }}>
             <div style={{ fontSize: "20px", color: "#ff00f2" }}>Guaranteed Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span></div>
             <div style={{ fontSize: "20px", color: "#ff00f2" }}>FCFS Whitelist access: <span style={{ color: "#00ffff" }}>{countdown}</span></div>
           </Box>
@@ -131,7 +162,6 @@ function Index() {
       </Container>
     </Wrapper>
   );
-
 }
 
 export default Index;
