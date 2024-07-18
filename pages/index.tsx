@@ -427,7 +427,7 @@ export default function Home() {
                       <Box className="paymentAdress">
                         <Typography variant="h5" className="hdPymnt">
                           Excellent! Now make your payment (payment must be made from source
-                          holder Wallet Address):
+                          holder Wallet Address), paste the tx hash, and submit!
                         </Typography>
 
                         <Box className="paymentAdressTable">
