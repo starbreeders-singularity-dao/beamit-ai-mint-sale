@@ -8,16 +8,38 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 
 function Index() {
   const [walletAddress, setWalletAddress] = useState<string>("");
-  // const [error, setError] = useState<string>("");
+  const [countdown, setCountdown] = useState<string>("00:00:00:00");
   const router = useRouter();
 
-  const handleLogin = async (walletAddress: string) => {
+  useEffect(() => {
+    const updateCountdown = () => {
+      let now = new Date().getTime();
+      let countdownDate = new Date(now + 48 * 60 * 60 * 1000).getTime(); // 48 hours later
+      let distance = countdownDate - now;
 
+      let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      setCountdown(`${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
+
+      if (distance < 0) {
+        setCountdown("00:00:00:00");
+      }
+    };
+
+    const interval = setInterval(updateCountdown, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleLogin = async (walletAddress: string) => {
     if (!walletAddress) {
       await Swal.fire({
         icon: "warning",
@@ -54,11 +76,11 @@ function Index() {
     }
   };
 
-  const handleSubmit = async (event:any) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
     await handleLogin(walletAddress);
   };
-  
+
   return (
     <Wrapper imageWrapper={assest?.BackstickyMain2}>
       <Container fixed>
@@ -100,6 +122,10 @@ function Index() {
                 </CustomButtonPrimary>
               </Grid>
             </Grid>
+          </Box>
+          <Box sx={{ textAlign: "center", marginTop: "50px" }}>
+            <div style={{ fontSize: "28px", color: "#ff00f2" }}>Guaranteed Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span></div>
+            <div style={{ fontSize: "28px", color: "#ff00f2" }}>FCFS Whitelist access: <span style={{ color: "#00ffff" }}>{countdown}</span></div>
           </Box>
         </AuthStyled>
       </Container>
