@@ -1,3 +1,6 @@
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 import assest from "@/json/assest";
 import Wrapper from "@/layout/wrapper/Wrapper";
 import { isAddressWhitelisted } from "@/lib/supabase/db";
@@ -7,9 +10,6 @@ import CustomButtonPrimary from "@/ui/CustomButtons/CustomButtonPrimary";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
-import Swal from "sweetalert2";
 
 function Index() {
   const [walletAddress, setWalletAddress] = useState<string>("");
@@ -18,14 +18,14 @@ function Index() {
 
   useEffect(() => {
     const updateCountdown = () => {
-      let now = new Date().getTime();
-      let countdownDate = new Date(now + 48 * 60 * 60 * 1000).getTime(); // 48 hours later
-      let distance = countdownDate - now;
+      const now = new Date().getTime();
+      const countdownDate = new Date(now + 48 * 60 * 60 * 1000).getTime(); // 48 hours later
+      const distance = countdownDate - now;
 
-      let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
       setCountdown(`${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
 
