@@ -50,7 +50,7 @@ export default function Home() {
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedSource(event.target.value);
-    if (["BTC Ordinal", "ETH NFT", "Solana NFT"].includes(event.target.value)) {
+    if (["Bitcoin", "Ethereum", "Solana"].includes(event.target.value)) {
       setShowNFTAddressText(true);
     } else {
       setShowNFTAddressText(false);
