@@ -1,112 +1,123 @@
-import { useRouter } from "next/router";
-import { useState } from "react";
-import Swal from "sweetalert2";
-import assest from "@/json/assest";
-import Wrapper from "@/layout/wrapper/Wrapper";
-import { isAddressWhitelisted } from "@/lib/supabase/db";
-import { AuthStyled } from "@/styles/StyledComponents/AuthStyled";
-import InputFieldCommon from "@/ui/CommonInput/CommonInput";
-import CustomButtonPrimary from "@/ui/CustomButtons/CustomButtonPrimary";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
+/* eslint-disable no-console */
 
-function Index() {
-  const [walletAddress, setWalletAddress] = useState<string>("");
+import MenuIcon from "@mui/icons-material/Menu";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import * as React from "react";
+
+import { useAppDispatch } from "@/hooks/redux/useAppDispatch";
+import { useAppSelector } from "@/hooks/redux/useAppSelector";
+import assest from "@/json/assest";
+import { logout } from "@/reduxtoolkit/slices/userSlice";
+import CustomButtonPrimary from "@/ui/CustomButtons/CustomButtonPrimary";
+
+import { HeaderWrap } from "@/styles/StyledComponents/HeaderWrapper";
+import { Container } from "@mui/system";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+
+// const CustomButton = dynamic(() => import("@/ui/Buttons/CustomButton"));
+
+export default function Header() {
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const { userData, isLoggedIn } = useAppSelector((state) => state.userSlice);
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const handleLogin = async (walletAddress: string) => {
-    if (!walletAddress) {
-      await Swal.fire({
-        icon: "warning",
-        title: "No Wallet Address",
-        text: "Please provide a wallet address."
-      });
-      return;
-    }
-
-    try {
-      const isWhitelisted = await isAddressWhitelisted(walletAddress);
-
-      if (isWhitelisted) {
-        localStorage.setItem("whiteListAddress", walletAddress);
-        await Swal.fire({
-          icon: "success",
-          title: "Whitelist Address",
-          text: `The address ${walletAddress} successfully logged in.`
-        });
-        router.push("/");
-      } else {
-        await Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: `The address ${walletAddress} is not whitelisted.`
-        });
-      }
-    } catch (error: any) {
-      await Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: `An error occurred: ${error.message}`
-      });
-    }
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
   };
 
-  const handleSubmit = async (event: any) => {
-    event.preventDefault();
-    await handleLogin(walletAddress);
+  const handleLogout = () => {
+    dispatch(logout());
+    router.push("/login");
   };
 
   return (
-    <Wrapper imageWrapper={assest?.BackstickyMain2}>
-      <Container fixed>
-        <AuthStyled>
-          <Box sx={{ textAlign: "center", marginBottom: "50px" }}>
-            <div style={{ fontSize: "20px", color: "#ff00f2" }}>Guaranteed Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span></div>
-            <div style={{ fontSize: "20px", color: "#ff00f2" }}>FCFS Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span></div>
-          </Box>
-          <Box className="capchaLoginSectn">
-            <Grid
-              container
-              rowSpacing={{ xs: 2, md: 4.8 }}
-              columnSpacing={{ xs: 2, md: 3 }}
-            >
-              <Grid item xs={12}>
-                <form onSubmit={handleSubmit}>
-                  <Box className="capchaLoginSec">
-                    <InputFieldCommon
-                      type="text"
-                      onChange={(e) => {
-                        setWalletAddress(e.target.value);
-                      }}
-                    />
-                    <CustomButtonPrimary
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      className="customBtnCn"
-                    >
-                      login
-                    </CustomButtonPrimary>
-                  </Box>
-                </form>
-              </Grid>
-              <Grid item xs={12} sx={{ textAlign: "center" }}>
+    <HeaderWrap sx={{ display: "flex" }} className="main_head">
+      <AppBar
+        component="nav"
+        position="static"
+        elevation={0}
+        className="headerContainer"
+      >
+        <Container fixed>
+          <Toolbar sx={{ justifyContent: "space-between" }}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ mr: 2, display: "none" }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Link href="https://beamit.space/" className="headerLogo">
+                <Image src={assest.logoMain} width={150} height={95} alt="Logo" />
+              </Link>
+              <Box sx={{ marginLeft: "80px", display: "flex", alignItems: "center" }}>
+                <Link href="https://whitelist.beamit.space/" passHref>
+                  <a style={{ 
+                    color: "#ff00ff", 
+                    textDecoration: "none", 
+                    fontSize: "20px", 
+                    fontFamily: "Square721-BT",
+                    marginRight: "50px",
+                    transition: "color 0.3s"
+                  }} onMouseOver={(e) => (e.currentTarget.style.color = "#00ffff")} onMouseOut={(e) => (e.currentTarget.style.color = "#ff00ff")}>
+                    Alphamint Waitlist
+                  </a>
+                </Link>
+                <Link href="https://docs.google.com/forms/d/1TzmYPtzWh2udYO8RD-ZOSOpSWgewQK_WL4ZaS1UeTb4/" passHref>
+                  <a style={{ 
+                    color: "#ff00ff", 
+                    textDecoration: "none", 
+                    fontSize: "20px", 
+                    fontFamily: "Square721-BT",
+                    transition: "color 0.3s"
+                  }} onMouseOver={(e) => (e.currentTarget.style.color = "#00ffff")} onMouseOut={(e) => (e.currentTarget.style.color = "#ff00ff")}>
+                    Join Ambassador Program
+                  </a>
+                </Link>
+              </Box>
+            </Box>
+            {isLoggedIn ? (
+              <Box
+                sx={{ display: { xs: "none", sm: "block" } }}
+                className="navbar"
+              >
+                <CustomButtonPrimary
+                  onClick={handleLogout}
+                  type="button"
+                  variant="contained"
+                  color="primary"
+                >
+                  <span>Logout</span>
+                </CustomButtonPrimary>
+
                 <CustomButtonPrimary
                   type="button"
                   variant="contained"
-                  color="secondary"
-                  className="customBtnCn capchaLoginBtnSc"
+                  color="primary"
                 >
-                  recaptcha
+                  <span>{userData?.email}</span>
                 </CustomButtonPrimary>
-              </Grid>
-            </Grid>
-          </Box>
-        </AuthStyled>
-      </Container>
-    </Wrapper>
+              </Box>
+            ) : (
+              <Box className="bmntRtPrt">
+                <Typography variant="h3" className="txtrtLg">
+                  alphamint
+                </Typography>
+              </Box>
+            )}
+          </Toolbar>
+        </Container>
+      </AppBar>
+    </HeaderWrap>
   );
 }
-
-export default Index;
