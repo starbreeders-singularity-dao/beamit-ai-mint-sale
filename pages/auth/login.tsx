@@ -1,126 +1,530 @@
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import Link from "next/link";
 import Swal from "sweetalert2";
+import { isAddress } from "web3-validator";
+import {
+  Box,
+  Container,
+  Grid,
+  List,
+  ListItem,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Typography,
+} from "@mui/material";
+import CommonRadio from "@/components/CommonChecked/CommonRadio";
+import ProtectedRoute from "@/components/Authentication/ProtectedRoute";
 import assest from "@/json/assest";
+import { checkedSource } from "@/json/mock/checkedSource.mock";
+import { paymentMethodList as initialPaymentMethodList } from "@/json/mock/paymentMethodList.mock";
 import Wrapper from "@/layout/wrapper/Wrapper";
-import { isAddressWhitelisted } from "@/lib/supabase/db";
-import { AuthStyled } from "@/styles/StyledComponents/AuthStyled";
+import { HomePageStyled } from "@/styles/StyledComponents/HomePageStyled";
 import InputFieldCommon from "@/ui/CommonInput/CommonInput";
 import CustomButtonPrimary from "@/ui/CustomButtons/CustomButtonPrimary";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Link from "next/link";
-import Image from "next/image";
+import MuiModalWrapper from "@/ui/Modal/MuiModalWrapper";
+import {
+  checkWalletAddress,
+  fetchLatestMintId,
+  isAddressWhitelisted,
+  register,
+} from "@/lib/supabase/db";
 
-
-function Index() {
-  const [walletAddress, setWalletAddress] = useState<string>("");
+export default function Home() {
   const router = useRouter();
+  const [nftAddress, setNftAddress] = useState("");
+  const [holderAddress, setHolderAddress] = useState("");
+  const [recipientAddress, setRecipientAddress] = useState("");
+  const [paymentHash, setPaymentHash] = useState("");
+  const [selectedSource, setSelectedSource] = useState("");
+  const [mintId, setMintId] = useState("");
+  const [nftAddress2, setNftAddress2] = useState("");
+  const [nftAddress3, setNftAddress3] = useState("");
+  const [paymentMethodList, setPaymentMethodList] = useState(initialPaymentMethodList);
+  const [openStepModal, setOpenStepModal] = useState(false);
+  const [showNFTAddressText, setShowNFTAddressText] = useState(false);
+  const [showPopupMessage, setShowPopupMessage] = useState(false);
+  const [showHolderPopupMessage, setShowHolderPopupMessage] = useState(false);
 
-  const handleLogin = async (walletAddress: string) => {
-    if (!walletAddress) {
-      await Swal.fire({
-        icon: "warning",
-        title: "No Wallet Address",
-        text: "Please provide a wallet address."
-      });
-      return;
-    }
-
-    try {
-      const isWhitelisted = await isAddressWhitelisted(walletAddress);
-
-      if (isWhitelisted) {
-        localStorage.setItem("whiteListAddress", walletAddress);
-        await Swal.fire({
-          icon: "success",
-          title: "Whitelist Address",
-          text: `The address ${walletAddress} successfully logged in.`
-        });
-        router.push("/");
-      } else {
-        await Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: `The address ${walletAddress} is not whitelisted.`
-        });
-      }
-    } catch (error: any) {
-      await Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: `An error occurred: ${error.message}`
-      });
+  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedSource(event.target.value);
+    if (["BTC Ordinal", "ETH NFT", "Solana NFT"].includes(event.target.value)) {
+      setShowNFTAddressText(true);
+    } else {
+      setShowNFTAddressText(false);
     }
   };
 
-  const handleSubmit = async (event: any) => {
-    event.preventDefault();
-    await handleLogin(walletAddress);
+  function isValidEthAddress(address: string) {
+    return isAddress(address);
+  }
+
+  function validateHolderAddress(selectedSource: string) {
+    try {
+      if (selectedSource === "BTC Ordinal" || selectedSource === "ETH NFT" || selectedSource === "Solana NFT") {
+        return true;
+      } else {
+        return false;
+      }
+    } catch {
+      return false;
+    }
+  }
+
+  const handleLogout = () => {
+    try {
+      const check = localStorage.getItem("whiteListAddress");
+      if (check) {
+        localStorage.removeItem("whiteListAddress");
+        router.push("/auth/login");
+      }
+    } catch (error) {
+      // Handle error (optional)
+    }
+  };
+
+  const updatePaymentMethodList = () => {
+    let multiplier = 1;
+    if (nftAddress && nftAddress2 && nftAddress3) {
+      multiplier = 3;
+    } else if (nftAddress && nftAddress2) {
+      multiplier = 2;
+    }
+
+    const updatedList = initialPaymentMethodList.map((item) => ({
+      ...item,
+      price: (parseFloat(item.price) * multiplier).toFixed(5),
+    }));
+
+    setPaymentMethodList(updatedList);
+  };
+
+  useEffect(() => {
+    updatePaymentMethodList();
+  }, [nftAddress, nftAddress2, nftAddress3]);
+
+  const handleSubmit = async () => {
+    try {
+      const isWhitelistedAddress = localStorage.getItem("whiteListAddress");
+      if (!isWhitelistedAddress) {
+        throw new Error("No whitelisted address found");
+      }
+
+      const isWhitelisted = await isAddressWhitelisted(isWhitelistedAddress);
+      const checkWalletAlreadyPresent = await checkWalletAddress(isWhitelistedAddress);
+
+      if (checkWalletAlreadyPresent) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "This wallet address is already registered.",
+          confirmButtonText: "OK",
+        });
+        return false;
+      }
+
+      const errors = {
+        optionSelected: selectedSource === "",
+        pfpAddress: nftAddress === "",
+        sourceHolderAddress: holderAddress === "",
+        destinationWalletAddress: recipientAddress === "",
+        paymentTxHash: paymentHash === "",
+      };
+
+      if (
+        errors.pfpAddress ||
+        errors.sourceHolderAddress ||
+        errors.destinationWalletAddress ||
+        errors.paymentTxHash ||
+        errors.optionSelected
+      ) {
+        Swal.fire({
+          icon: "error",
+          title: "Validation Error",
+          text: "Please fill in all required fields.",
+          confirmButtonText: "OK",
+        });
+        return true;
+      }
+
+      if (isWhitelisted) {
+        const objData = {
+          nftAddress,
+          holderAddress,
+          recipientAddress,
+          paymentHash,
+          isWhitelistedAddress,
+          selectedSource,
+          nftAddress2,
+          nftAddress3,
+        };
+
+        const isValidHolderAddress = validateHolderAddress(selectedSource);
+        if (isValidHolderAddress) {
+          const create = await register(objData);
+
+          if (create) {
+            const mintedId = await fetchLatestMintId(isWhitelistedAddress);
+            setMintId(mintedId);
+
+            Swal.fire({
+              icon: "success",
+              title: "Registration Successful",
+              text: "You have successfully registered.",
+              confirmButtonText: "OK",
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops!",
+              text: "An error occurred while registering.",
+              confirmButtonText: "OK",
+            });
+          }
+        }
+      }
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  // Validation for recipientAddress
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (recipientAddress) {
+        if (!selectedSource) {
+          Swal.fire({
+            icon: "error",
+            title: "Select Options",
+            text: "Invalid Options",
+            confirmButtonText: "OK",
+          });
+        }
+        const isValidEth = isValidEthAddress(recipientAddress);
+        if (!isValidEth) {
+          Swal.fire({
+            icon: "error",
+            title: "Validation Error",
+            text: "Invalid Ethereum Address",
+            confirmButtonText: "OK",
+          });
+        }
+      }
+    }, 500);
+    return () => clearTimeout(timeoutId);
+  }, [recipientAddress, selectedSource]);
+
+  // Validation for holderAddress - removed to prevent the popup from showing
+  useEffect(() => {
+    // Removed validation code
+  }, [holderAddress]);
+
+  // Validation for nftAddress
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (nftAddress) {
+        if (!nftAddress) {
+          Swal.fire({
+            icon: "error",
+            title: "Validation Error",
+            text: "Welcome! Pick the PFP you want to beam into a 3D avatar. Paste NFT Address or Ordinals Inscription number here.",
+            confirmButtonText: "OK",
+          });
+        }
+      }
+    }, 500);
+    return () => clearTimeout(timeoutId);
+  }, [nftAddress]);
+
+  const handleStepModalClose = () => {
+    setOpenStepModal(false);
   };
 
   return (
-    <Wrapper imageWrapper={assest?.BackstickyMain2}>
-      <Container fixed>
-        <AuthStyled>
-          <Box>
-            <div style={{ fontSize: "12px", color: "#00ffff" }}>
-              FCFS Whitelist access: <span id="counter">LIVE</span>
-            </div>
-            <div style={{ fontSize: "12px", color: "#00ffff" }}>
-              <Link href="https://docs.google.com/forms/d/1TzmYPtzWh2udYO8RD-ZOSOpSWgewQK_WL4ZaS1UeTb4/" passHref>
-                <a style={{ color: "#00ffff", textDecoration: "none" }}>Join Ambassador Program</a>
-              </Link>
-            </div>
-            <div style={{ fontSize: "12px", color: "#00ffff" }}>
-              <Link href="https://whitelist.beamit.space/" passHref>
-                <a style={{ color: "#00ffff", textDecoration: "none" }}>Alphamint Waitlist</a>
-              </Link>
-            </div>
-          </Box>
-          <Box className="capchaLoginSectn">
-            <Grid
-              container
-              rowSpacing={{ xs: 2, md: 4.8 }}
-              columnSpacing={{ xs: 2, md: 3 }}
-            >
-              <Grid item xs={12}>
-                <form onSubmit={handleSubmit}>
-                  <Box className="capchaLoginSec">
-                    <InputFieldCommon
-                      type="text"
-                      onChange={(e) => {
-                        setWalletAddress(e.target.value);
-                      }}
-                    />
-                    <CustomButtonPrimary
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      className="customBtnCn"
-                    >
-                      Login
-                    </CustomButtonPrimary>
+    <ProtectedRoute>
+      <Wrapper imageWrapper={assest?.BackstickyMain}>
+        <HomePageStyled>
+          <Box className="homeSourceWrap">
+            <Container fixed>
+              <Box className="homeSourceWrapTop">
+                <Box className="homeSourceWrapLf">
+                  <Typography variant="body1" style={{ color: '#ff00f2' }}>
+                    Welcome! You made it to the alphamint. Now take your time to enter everything correctly. First pick the source chain of your PFP:
+                  </Typography>
+                </Box>
+
+                <Box className="homeSourceWrapRt">
+                  <Box className="homeSourceChckbx">
+                    {checkedSource.map((item) => (
+                      <CommonRadio
+                        name="source"
+                        key={item.value} // Use unique value as key
+                        label={item?.name}
+                        value={item?.value}
+                        checked={selectedSource === item?.value}
+                        onChange={handleRadioChange}
+                      />
+                    ))}
                   </Box>
-                </form>
-              </Grid>
-              <Grid item xs={12} sx={{ textAlign: "center" }}>
-                <CustomButtonPrimary
-                  type="button"
-                  variant="contained"
-                  color="secondary"
-                  className="customBtnCn capchaLoginBtnSc"
+                </Box>
+              </Box>
+
+              <Box className="homeSourceWrapBtm">
+                <Grid
+                  container
+                  rowSpacing={{ xs: 2, sm: 3, md: 4 }}
+                  columnSpacing={{ xs: 1, sm: 2 }}
                 >
-                  ReCAPTCHA
-                </CustomButtonPrimary>
-              </Grid>
-            </Grid>
+                  {showNFTAddressText && (
+                    <Grid item xs={12}>
+                      <Typography variant="body2" style={{ color: '#ff00f2', textAlign: 'left' }}>
+                        Now pick your favourite PFP you want to beam into a 3D avatar. Paste its NFT Address / Ordinals Inscription number or Marketplace link below.
+                      </Typography>
+                    </Grid>
+                  )}
+
+                  <Grid item xs={12}>
+                    <Box className="inputfldInner">
+                      <Typography variant="h5" className="inputLabel">
+                        Source PFP NFT/Ordinal
+                      </Typography>
+                      <InputFieldCommon
+                        type="text"
+                        value={nftAddress}
+                        onChange={(e) => {
+                          setNftAddress(e.target.value);
+                          if (e.target.value) {
+                            setShowPopupMessage(true);
+                          } else {
+                            setShowPopupMessage(false);
+                          }
+                        }}
+                      />
+                      {showPopupMessage && (
+                        <Typography variant="body2" style={{ color: '#ff00f2', textAlign: 'left', marginTop: '8px' }}>
+                          Awesome! Btw you can pick 2 more below! It&#39;s only 10 USD for each 3D avatar.
+                        </Typography>
+                      )}
+                    </Box>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Box className="inputfldInner">
+                      <Typography variant="h5" className="inputLabel">
+                        2nd source PFP NFT/Ordinal
+                      </Typography>
+                      <InputFieldCommon
+                        type="text"
+                        value={nftAddress2}
+                        onChange={(e) => {
+                          setNftAddress2(e.target.value);
+                        }}
+                      />
+                    </Box>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Box className="inputfldInner">
+                      <Typography variant="h5" className="inputLabel">
+                        3rd PFP NFT/Ordinal
+                      </Typography>
+                      <InputFieldCommon
+                        type="text"
+                        value={nftAddress3}
+                        onChange={(e) => {
+                          setNftAddress3(e.target.value);
+                        }}
+                      />
+                    </Box>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Box className="inputfldInner">
+                      <Typography variant="h5" className="inputLabel">
+                        Source Holder Wallet Address
+                      </Typography>
+                      <Typography variant="body2" style={{ color: '#ff00f2', textAlign: 'left', marginTop: '8px'}}>
+                        Now paste the wallet that is holding your NFTs / Ordinals here.
+                      </Typography>
+                      <InputFieldCommon
+                        type="text"
+                        value={holderAddress}
+                        onChange={(e) => {
+                          setHolderAddress(e.target.value);
+                          if (e.target.value) {
+                            setShowHolderPopupMessage(true);
+                          } else {
+                            setShowHolderPopupMessage(false);
+                          }
+                        }}
+                      />
+                      {showHolderPopupMessage && (
+                        <Typography variant="body2" style={{ color: '#ff00f2', textAlign: 'left', marginTop: '8px' }}>
+                          Got it. Now paste your Ethereum wallet below. The one where you want to receive your 3D Avatars.
+                        </Typography>
+                      )}
+                    </Box>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Box className="inputfldInner">
+                      <Typography variant="h5" className="inputLabel">
+                        Ethereum Destination Wallet Address
+                      </Typography>
+                      <InputFieldCommon
+                        type="text"
+                        value={recipientAddress}
+                        onChange={(e) => {
+                          setRecipientAddress(e.target.value);
+                        }}
+                      />
+                    </Box>
+                  </Grid>
+
+                  {mintId && (
+                    <Grid item xs={12}>
+                      <Box className="txtInnerCmdl">
+                        <Typography variant="body1">
+                          Congratulations for attending the Beamit AI Alphamint!
+                          Given your payment and information was entered
+                          correctly, your 3D Avatar will be ready right after the sale ended on{" "}
+                          <Link href="http://alphamint.beamit.space.">
+                            http://alphamint.beamit.space.
+                          </Link>
+                        </Typography>
+                        <Typography variant="body1">
+                          Please check our discord for updates. Your mint ID is{" "}
+                          <Typography variant="caption" className="numbrID">
+                            {mintId}
+                          </Typography>
+                        </Typography>
+                      </Box>
+                    </Grid>
+                  )}
+
+                  {!mintId &&
+                  nftAddress.length > 0 &&
+                  holderAddress.length > 0 &&
+                  recipientAddress.length > 0 ? (
+                    <Grid item xs={12}>
+                      <Box className="paymentAdress">
+                        <Typography variant="h5" className="hdPymnt">
+                          Excellent! Now make your payment (payment must be made from source
+                          holder Wallet Address), paste the tx hash, and submit - done! With submitting the payment you confirm to agree to our terms and conditions as linked on beamit.space.
+                        </Typography>
+
+                        <Box className="paymentAdressTable">
+                          <Table>
+                            <TableBody>
+                              {paymentMethodList.map((item) => (
+                                <TableRow key={item.value}> {/* Use unique value as key */}
+                                  <TableCell component="td" scope="row">
+                                    <Box className="paymentInfoInner">
+                                      <Box className="coinName">
+                                        {item?.name}
+                                      </Box>
+                                      <Box className="coinPrice" style={{ color: '#00ffff' }}>
+                                        {item?.price}
+                                      </Box>
+                                      <Box className="coinValue">
+                                        {item?.value}
+                                      </Box>
+                                    </Box>
+                                  </TableCell>
+
+                                  <TableCell component="td" scope="row">
+                                    <Box className="walletAdrss">
+                                      <Typography variant="body1">
+                                        {item?.wallet}
+                                      </Typography>
+                                    </Box>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </Box>
+                      </Box>
+                    </Grid>
+                  ) : (
+                    " "
+                  )}
+
+                  <Grid item xs={12}>
+                    <Box className="inputfldInner">
+                      <Typography variant="h4" className="inputLabel">
+                        Payment Transaction Hash
+                      </Typography>
+                      <InputFieldCommon
+                        type="text"
+                        value={paymentHash}
+                        onChange={(e) => {
+                          setPaymentHash(e.target.value);
+                        }}
+                      />
+                    </Box>
+                  </Grid>
+
+                  <Grid item xs={12} sx={{ textAlign: "center" }}>
+                    <List className="submitBtnLtt">
+                      <ListItem>
+                        <CustomButtonPrimary
+                          type="button"
+                          variant="contained"
+                          color="primary"
+                          className="customBtnCn"
+                          onClick={handleSubmit}
+                        >
+                          Submit
+                        </CustomButtonPrimary>
+                      </ListItem>
+
+                      <ListItem>
+                        <CustomButtonPrimary
+                          type="button"
+                          variant="contained"
+                          color="primary"
+                          className="customBtnCn"
+                          onClick={handleLogout}
+                        >
+                          Logout
+                        </CustomButtonPrimary>
+                      </ListItem>
+                    </List>
+                  </Grid>
+                </Grid>
+              </Box>
+            </Container>
           </Box>
-        </AuthStyled>
-      </Container>
-    </Wrapper>
+        </HomePageStyled>
+      </Wrapper>
+
+      <MuiModalWrapper
+        open={openStepModal}
+        onClose={handleStepModalClose}
+        title=""
+      >
+        <Box className="modalStepOutrSc">
+          <Typography variant="body1">
+            Congratulations for attending the Beamit AI Alphamint! Given your
+            payment and information was entered correctly, your 3D Avatar will
+            be mintable within 10 days on{" "}
+            <Link href="http://alphamint.beamit.space.">
+              http://alphamint.beamit.space.
+            </Link>
+          </Typography>
+          <Typography variant="body1">
+            Please check our discord for updates. Your mint ID is{" "}
+            <Typography variant="caption" className="numbrID">
+              {mintId}
+            </Typography>
+          </Typography>
+        </Box>
+      </MuiModalWrapper>
+    </ProtectedRoute>
   );
 }
-
-export default Index;
