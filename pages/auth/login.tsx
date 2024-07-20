@@ -10,6 +10,7 @@ import CustomButtonPrimary from "@/ui/CustomButtons/CustomButtonPrimary";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import Link from "next/link";
 
 function Index() {
   const [walletAddress, setWalletAddress] = useState<string>("");
@@ -64,6 +65,16 @@ function Index() {
           <Box sx={{ textAlign: "center", marginBottom: "50px" }}>
             <div style={{ fontSize: "20px", color: "#ff00f2" }}>Guaranteed Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span></div>
             <div style={{ fontSize: "20px", color: "#ff00f2" }}>FCFS Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span></div>
+            <div style={{ fontSize: "12px", color: "#00ffff" }}>
+              <Link href="https://whitelist.beamit.space/" passHref>
+                <a style={{ color: "#00ffff", textDecoration: "none" }}>Alphamint Waitlist</a>
+              </Link>
+            </div>
+            <div style={{ fontSize: "12px", color: "#00ffff" }}>
+              <Link href="https://docs.google.com/forms/d/1TzmYPtzWh2udYO8RD-ZOSOpSWgewQK_WL4ZaS1UeTb4/" passHref>
+                <a style={{ color: "#00ffff", textDecoration: "none" }}>Join Ambassador Program</a>
+              </Link>
+            </div>
           </Box>
           <Box className="capchaLoginSectn">
             <Grid
