@@ -64,6 +64,7 @@ function Index() {
       <Container fixed>
         <AuthStyled>
           <Box sx={{ textAlign: "center", marginBottom: "50px" }}>
+            <Link href="https://beamit.space/" pass
             <Link href="https://beamit.space/" passHref>
               <a>
                 <Image
@@ -129,7 +130,6 @@ function Index() {
       </Container>
     </Wrapper>
   );
-
 }
 
 export default Index;
