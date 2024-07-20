@@ -80,4 +80,56 @@ export default function Header() {
                 </Link>
                 <Link href="https://docs.google.com/forms/d/1TzmYPtzWh2udYO8RD-ZOSOpSWgewQK_WL4ZaS1UeTb4/" passHref>
                   <a
-                    href="https://docs.google
+                    href="https://docs.google.com/forms/d/1TzmYPtzWh2udYO8RD-ZOSOpSWgewQK_WL4ZaS1UeTb4/"
+                    style={{ 
+                      color: "#ff00ff", 
+                      textDecoration: "none", 
+                      fontSize: "20px", 
+                      fontFamily: "Square721-BT",
+                      transition: "color 0.3s"
+                    }}
+                    onMouseOver={(e) => (e.currentTarget.style.color = "#00ffff")}
+                    onMouseOut={(e) => (e.currentTarget.style.color = "#ff00ff")}
+                    onFocus={(e) => (e.currentTarget.style.color = "#00ffff")}
+                    onBlur={(e) => (e.currentTarget.style.color = "#ff00ff")}
+                  >
+                    Join Ambassador Program
+                  </a>
+                </Link>
+              </Box>
+            </Box>
+            {isLoggedIn ? (
+              <Box
+                sx={{ display: { xs: "none", sm: "block" } }}
+                className="navbar"
+              >
+                <CustomButtonPrimary
+                  onClick={handleLogout}
+                  type="button"
+                  variant="contained"
+                  color="primary"
+                >
+                  <span>Logout</span>
+                </CustomButtonPrimary>
+
+                <CustomButtonPrimary
+                  type="button"
+                  variant="contained"
+                  color="primary"
+                >
+                  <span>{userData?.email}</span>
+                </CustomButtonPrimary>
+              </Box>
+            ) : (
+              <Box className="bmntRtPrt">
+                <Typography variant="h3" className="txtrtLg">
+                  alphamint
+                </Typography>
+              </Box>
+            )}
+          </Toolbar>
+        </Container>
+      </AppBar>
+    </HeaderWrap>
+  );
+}
