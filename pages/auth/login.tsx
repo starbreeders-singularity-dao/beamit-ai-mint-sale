@@ -21,7 +21,7 @@ function Index() {
     if (!walletAddress) {
       await Swal.fire({
         icon: "warning",
-        title: "No ",
+        title: "No Wallet Address",
         text: "Please provide a wallet address."
       });
       return;
@@ -112,7 +112,7 @@ function Index() {
                       color="primary"
                       className="customBtnCn"
                     >
-                      login
+                      Login
                     </CustomButtonPrimary>
                   </Box>
                 </form>
@@ -124,7 +124,7 @@ function Index() {
                   color="secondary"
                   className="customBtnCn capchaLoginBtnSc"
                 >
-                  recaptcha
+                  ReCAPTCHA
                 </CustomButtonPrimary>
               </Grid>
             </Grid>
