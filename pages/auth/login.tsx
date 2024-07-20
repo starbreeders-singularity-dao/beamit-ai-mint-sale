@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Swal from "sweetalert2";
 import assest from "@/json/assest";
 import Wrapper from "@/layout/wrapper/Wrapper";
@@ -11,6 +11,7 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Link from "next/link";
+import Image from "next/image";
 
 function Index() {
   const [walletAddress, setWalletAddress] = useState<string>("");
@@ -63,12 +64,15 @@ function Index() {
       <Container fixed>
         <AuthStyled>
           <Box sx={{ textAlign: "center", marginBottom: "50px" }}>
-            <Link href="https://beamit.space/">
-              <img
-                src="https://alphamint.beamit.space/_next/image/?url=%2Fassets%2Fimages%2Flogo.png&w=256&q=75"
-                alt="Logo"
-                style={{ cursor: "pointer" }}
-              />
+            <Link href="https://beamit.space/" passHref>
+              <a>
+                <Image
+                  src="https://alphamint.beamit.space/_next/image/?url=%2Fassets%2Fimages%2Flogo.png&w=256&q=75"
+                  alt="Logo"
+                  width={256}
+                  height={75}
+                />
+              </a>
             </Link>
             <div style={{ fontSize: "20px", color: "#ff00f2" }}>Guaranteed Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span></div>
             <div style={{ fontSize: "20px", color: "#ff00f2" }}>FCFS Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span></div>
