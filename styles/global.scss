@@ -100,17 +100,15 @@ body {
 
 @font-face {
   font-family: "square721_btroman";
-  src: url("../public/assets/fonts/square721_bt_roman-webfont.eot");
-  src: url("../public/assets/fonts/square721_bt_roman-webfont.eot?#iefix")
-      format("embedded-opentype"),
-    url("../public/assets/fonts/square721_bt_roman-webfont.woff2")
-      format("woff2"),
-    url("../public/assets/fonts/square721_bt_roman-webfont.woff") format("woff"),
-    url("../public/assets/fonts/square721_bt_roman-webfont.ttf")
-      format("truetype");
+  src: url("/assets/fonts/square721_bt_roman-webfont.eot");
+  src: url("/assets/fonts/square721_bt_roman-webfont.eot?#iefix") format("embedded-opentype"),
+       url("/assets/fonts/square721_bt_roman-webfont.woff2") format("woff2"),
+       url("/assets/fonts/square721_bt_roman-webfont.woff") format("woff"),
+       url("/assets/fonts/square721_bt_roman-webfont.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
+
 
 :root {
   @include printVariables();
@@ -140,6 +138,8 @@ body {
 #__next {
   overflow-x: hidden;
 }
+
+
 
 .swal2-container{
   .swal2-popup{
