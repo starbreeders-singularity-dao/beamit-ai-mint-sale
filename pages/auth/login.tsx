@@ -13,37 +13,13 @@ import Grid from "@mui/material/Grid";
 
 function Index() {
   const [walletAddress, setWalletAddress] = useState<string>("");
-  const [countdown, setCountdown] = useState<string>("00:00:00:00");
   const router = useRouter();
-
-  useEffect(() => {
-    const updateCountdown = () => {
-      const now = new Date().getTime();
-      const countdownDate = new Date(now + 48 * 60 * 60 * 1000).getTime(); // 48 hours later
-      const distance = countdownDate - now;
-
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      setCountdown(`${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
-
-      if (distance < 0) {
-        setCountdown("00:00:00:00");
-      }
-    };
-
-    const interval = setInterval(updateCountdown, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   const handleLogin = async (walletAddress: string) => {
     if (!walletAddress) {
       await Swal.fire({
         icon: "warning",
-        title: "No ",
+        title: "No Wallet Address",
         text: "Please provide a wallet address."
       });
       return;
@@ -87,7 +63,7 @@ function Index() {
         <AuthStyled>
           <Box sx={{ textAlign: "center", marginBottom: "50px" }}>
             <div style={{ fontSize: "20px", color: "#ff00f2" }}>Guaranteed Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span></div>
-            <div style={{ fontSize: "20px", color: "#ff00f2" }}>FCFS Whitelist access: <span style={{ color: "#00ffff" }}>{countdown}</span></div>
+            <div style={{ fontSize: "20px", color: "#ff00f2" }}>FCFS Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span></div>
           </Box>
           <Box className="capchaLoginSectn">
             <Grid
@@ -131,7 +107,6 @@ function Index() {
       </Container>
     </Wrapper>
   );
-
 }
 
 export default Index;
