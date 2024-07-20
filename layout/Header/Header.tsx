@@ -23,7 +23,6 @@ import { useRouter } from "next/router";
 // const CustomButton = dynamic(() => import("@/ui/Buttons/CustomButton"));
 
 export default function Header() {
-  // const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const { userData, isLoggedIn } = useAppSelector((state) => state.userSlice);
   const dispatch = useAppDispatch();
@@ -47,19 +46,29 @@ export default function Header() {
         className="headerContainer"
       >
         <Container fixed>
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: "none" }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Link href="/" className="headerLogo">
-              <Image src={assest.logoMain} width={150} height={95} alt="Logo" />
-            </Link>
+          <Toolbar sx={{ justifyContent: "space-between" }}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ mr: 2, display: "none" }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Link href="/" className="headerLogo">
+                <Image src={assest.logoMain} width={150} height={95} alt="Logo" />
+              </Link>
+              <Box sx={{ marginLeft: "20px", color: "#00ffff" }}>
+                <Link href="https://whitelist.beamit.space/" passHref>
+                  <a style={{ color: "#00ffff", textDecoration: "none", fontSize: "12px", display: "block" }}>Alphamint Waitlist</a>
+                </Link>
+                <Link href="https://docs.google.com/forms/d/1TzmYPtzWh2udYO8RD-ZOSOpSWgewQK_WL4ZaS1UeTb4/" passHref>
+                  <a style={{ color: "#00ffff", textDecoration: "none", fontSize: "12px", display: "block" }}>Join Ambassador Program</a>
+                </Link>
+              </Box>
+            </Box>
             {isLoggedIn ? (
               <Box
                 sx={{ display: { xs: "none", sm: "block" } }}
