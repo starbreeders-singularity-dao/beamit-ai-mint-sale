@@ -60,12 +60,13 @@ export default function Header() {
               <Link href="https://beamit.space/" className="headerLogo">
                 <Image src={assest.logoMain} width={150} height={95} alt="Logo" />
               </Link>
-              <Box sx={{ marginLeft: "50px", display: "flex", alignItems: "center" }}>
+              <Box sx={{ marginLeft: "80px", display: "flex", alignItems: "center" }}>
                 <Link href="https://whitelist.beamit.space/" passHref>
                   <a style={{ 
                     color: "#ff00ff", 
                     textDecoration: "none", 
-                    fontSize: "22px", 
+                    fontSize: "20px", 
+                    fontFamily: "Square721-BT",
                     marginRight: "50px",
                     transition: "color 0.3s"
                   }} onMouseOver={(e) => (e.currentTarget.style.color = "#00ffff")} onMouseOut={(e) => (e.currentTarget.style.color = "#ff00ff")}>
@@ -76,7 +77,8 @@ export default function Header() {
                   <a style={{ 
                     color: "#ff00ff", 
                     textDecoration: "none", 
-                    fontSize: "22px", 
+                    fontSize: "20px", 
+                    fontFamily: "Square721-BT",
                     transition: "color 0.3s"
                   }} onMouseOver={(e) => (e.currentTarget.style.color = "#00ffff")} onMouseOut={(e) => (e.currentTarget.style.color = "#ff00ff")}>
                     Join Ambassador Program
