@@ -57,15 +57,30 @@ export default function Header() {
               >
                 <MenuIcon />
               </IconButton>
-              <Link href="/" className="headerLogo">
+              <Link href="https://beamit.space/" className="headerLogo">
                 <Image src={assest.logoMain} width={150} height={95} alt="Logo" />
               </Link>
-              <Box sx={{ marginLeft: "20px", color: "#00ffff" }}>
+              <Box sx={{ marginLeft: "50px", display: "flex", alignItems: "center" }}>
                 <Link href="https://whitelist.beamit.space/" passHref>
-                  <a style={{ color: "#00ffff", textDecoration: "none", fontSize: "12px", display: "block" }}>Alphamint Waitlist</a>
+                  <a style={{ 
+                    color: "#ff00ff", 
+                    textDecoration: "none", 
+                    fontSize: "22px", 
+                    marginRight: "50px",
+                    transition: "color 0.3s"
+                  }} onMouseOver={(e) => (e.currentTarget.style.color = "#00ffff")} onMouseOut={(e) => (e.currentTarget.style.color = "#ff00ff")}>
+                    Alphamint Waitlist
+                  </a>
                 </Link>
                 <Link href="https://docs.google.com/forms/d/1TzmYPtzWh2udYO8RD-ZOSOpSWgewQK_WL4ZaS1UeTb4/" passHref>
-                  <a style={{ color: "#00ffff", textDecoration: "none", fontSize: "12px", display: "block" }}>Join Ambassador Program</a>
+                  <a style={{ 
+                    color: "#ff00ff", 
+                    textDecoration: "none", 
+                    fontSize: "22px", 
+                    transition: "color 0.3s"
+                  }} onMouseOver={(e) => (e.currentTarget.style.color = "#00ffff")} onMouseOut={(e) => (e.currentTarget.style.color = "#ff00ff")}>
+                    Join Ambassador Program
+                  </a>
                 </Link>
               </Box>
             </Box>
