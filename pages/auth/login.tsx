@@ -10,6 +10,7 @@ import CustomButtonPrimary from "@/ui/CustomButtons/CustomButtonPrimary";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import Image from "next/image";
 
 function Index() {
   const [walletAddress, setWalletAddress] = useState<string>("");
@@ -61,11 +62,18 @@ function Index() {
     <Wrapper imageWrapper={assest?.BackstickyMain2}>
       <Container fixed>
         <AuthStyled>
-          <Box sx={{ textAlign: "center", marginBottom: "50px" }}>
-            <div style={{ fontSize: "12px", color: "#00ffff" }}>Alphamint Waitlist</div>
-            <div style={{ fontSize: "12px", color: "#00ffff" }}>Join Ambassador Program</div>
-            <div style={{ fontSize: "20px", color: "#ff00f2" }}>Guaranteed Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span></div>
-            <div style={{ fontSize: "20px", color: "#ff00f2" }}>FCFS Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span></div>
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "50px" }}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Image src="/assets/images/logo.png" alt="Logo" width={75} height={75} />
+              <div style={{ marginLeft: "20px", color: "#00ffff" }}>
+                <div style={{ fontSize: "12px" }}>Alphamint Waitlist</div>
+                <div style={{ fontSize: "12px" }}>Join Ambassador Program</div>
+              </div>
+            </Box>
+            <Box>
+              <div style={{ fontSize: "20px", color: "#ff00f2" }}>Guaranteed Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span></div>
+              <div style={{ fontSize: "20px", color: "#ff00f2" }}>FCFS Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span></div>
+            </Box>
           </Box>
           <Box className="capchaLoginSectn">
             <Grid
