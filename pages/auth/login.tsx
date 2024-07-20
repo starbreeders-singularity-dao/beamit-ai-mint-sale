@@ -64,7 +64,6 @@ function Index() {
       <Container fixed>
         <AuthStyled>
           <Box sx={{ textAlign: "center", marginBottom: "50px" }}>
-            <Link href="https://beamit.space/" pass
             <Link href="https://beamit.space/" passHref>
               <a>
                 <Image
@@ -75,8 +74,12 @@ function Index() {
                 />
               </a>
             </Link>
-            <div style={{ fontSize: "20px", color: "#ff00f2" }}>Guaranteed Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span></div>
-            <div style={{ fontSize: "20px", color: "#ff00f2" }}>FCFS Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span></div>
+            <div style={{ fontSize: "20px", color: "#ff00f2" }}>
+              Guaranteed Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span>
+            </div>
+            <div style={{ fontSize: "20px", color: "#ff00f2" }}>
+              FCFS Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span>
+            </div>
             <div style={{ fontSize: "12px", color: "#00ffff" }}>
               <Link href="https://docs.google.com/forms/d/1TzmYPtzWh2udYO8RD-ZOSOpSWgewQK_WL4ZaS1UeTb4/" passHref>
                 <a style={{ color: "#00ffff", textDecoration: "none" }}>Join Ambassador Program</a>
