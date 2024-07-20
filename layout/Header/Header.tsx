@@ -20,8 +20,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-// const CustomButton = dynamic(() => import("@/ui/Buttons/CustomButton"));
-
 export default function Header() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const { userData, isLoggedIn } = useAppSelector((state) => state.userSlice);
@@ -62,25 +60,39 @@ export default function Header() {
               </Link>
               <Box sx={{ marginLeft: "80px", display: "flex", alignItems: "center" }}>
                 <Link href="https://whitelist.beamit.space/" passHref>
-                  <a style={{ 
-                    color: "#ff00ff", 
-                    textDecoration: "none", 
-                    fontSize: "20px", 
-                    fontFamily: "Square721-BT",
-                    marginRight: "50px",
-                    transition: "color 0.3s"
-                  }} onMouseOver={(e) => (e.currentTarget.style.color = "#00ffff")} onMouseOut={(e) => (e.currentTarget.style.color = "#ff00ff")}>
+                  <a
+                    href="https://whitelist.beamit.space/"
+                    style={{ 
+                      color: "#ff00ff", 
+                      textDecoration: "none", 
+                      fontSize: "20px", 
+                      fontFamily: "square721_btroman",
+                      marginRight: "50px",
+                      transition: "color 0.3s"
+                    }}
+                    onMouseOver={(e) => (e.currentTarget.style.color = "#00ffff")}
+                    onMouseOut={(e) => (e.currentTarget.style.color = "#ff00ff")}
+                    onFocus={(e) => (e.currentTarget.style.color = "#00ffff")}
+                    onBlur={(e) => (e.currentTarget.style.color = "#ff00ff")}
+                  >
                     Alphamint Waitlist
                   </a>
                 </Link>
                 <Link href="https://docs.google.com/forms/d/1TzmYPtzWh2udYO8RD-ZOSOpSWgewQK_WL4ZaS1UeTb4/" passHref>
-                  <a style={{ 
-                    color: "#ff00ff", 
-                    textDecoration: "none", 
-                    fontSize: "20px", 
-                    fontFamily: "Square721-BT",
-                    transition: "color 0.3s"
-                  }} onMouseOver={(e) => (e.currentTarget.style.color = "#00ffff")} onMouseOut={(e) => (e.currentTarget.style.color = "#ff00ff")}>
+                  <a
+                    href="https://docs.google.com/forms/d/1TzmYPtzWh2udYO8RD-ZOSOpSWgewQK_WL4ZaS1UeTb4/"
+                    style={{ 
+                      color: "#ff00ff", 
+                      textDecoration: "none", 
+                      fontSize: "20px", 
+                      fontFamily: "square721_btroman",
+                      transition: "color 0.3s"
+                    }}
+                    onMouseOver={(e) => (e.currentTarget.style.color = "#00ffff")}
+                    onMouseOut={(e) => (e.currentTarget.style.color = "#ff00ff")}
+                    onFocus={(e) => (e.currentTarget.style.color = "#00ffff")}
+                    onBlur={(e) => (e.currentTarget.style.color = "#ff00ff")}
+                  >
                     Join Ambassador Program
                   </a>
                 </Link>
