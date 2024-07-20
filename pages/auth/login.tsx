@@ -13,6 +13,7 @@ import Grid from "@mui/material/Grid";
 import Link from "next/link";
 import Image from "next/image";
 
+
 function Index() {
   const [walletAddress, setWalletAddress] = useState<string>("");
   const router = useRouter();
