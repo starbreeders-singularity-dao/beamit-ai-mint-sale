@@ -1,15 +1,12 @@
 @import "./abstracts/theme.module";
 
 @font-face {
-  font-family: "square721_btroman";
-  src: url("../public/assets/fonts/square721_bt_roman-webfont.eot");
-  src: url("../public/assets/fonts/square721_bt_roman-webfont.eot?#iefix")
-      format("embedded-opentype"),
-    url("../public/assets/fonts/square721_bt_roman-webfont.woff2")
-      format("woff2"),
-    url("../public/assets/fonts/square721_bt_roman-webfont.woff") format("woff"),
-    url("../public/assets/fonts/square721_bt_roman-webfont.ttf")
-      format("truetype");
+  font-family: "Square721-BT";
+  src: url("/assets/fonts/Square721-BT.eot");
+  src: url("/assets/fonts/Square721-BT.eot?#iefix") format("embedded-opentype"),
+       url("/assets/fonts/Square721-BT.woff2") format("woff2"),
+       url("/assets/fonts/Square721-BT.woff") format("woff"),
+       url("/assets/fonts/Square721-BT.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
