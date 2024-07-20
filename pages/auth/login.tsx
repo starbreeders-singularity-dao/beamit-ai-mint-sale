@@ -10,34 +10,11 @@ import CustomButtonPrimary from "@/ui/CustomButtons/CustomButtonPrimary";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import Link from "next/link";
 
 function Index() {
   const [walletAddress, setWalletAddress] = useState<string>("");
-  const [countdown, setCountdown] = useState<string>("00:00:00:00");
   const router = useRouter();
-
-  useEffect(() => {
-    const updateCountdown = () => {
-      const now = new Date().getTime();
-      const countdownDate = new Date(now + 48 * 60 * 60 * 1000).getTime(); // 48 hours later
-      const distance = countdownDate - now;
-
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      setCountdown(`${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
-
-      if (distance < 0) {
-        setCountdown("00:00:00:00");
-      }
-    };
-
-    const interval = setInterval(updateCountdown, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   const handleLogin = async (walletAddress: string) => {
     if (!walletAddress) {
@@ -86,8 +63,25 @@ function Index() {
       <Container fixed>
         <AuthStyled>
           <Box sx={{ textAlign: "center", marginBottom: "50px" }}>
+            <Link href="https://beamit.space/">
+              <img
+                src="https://alphamint.beamit.space/_next/image/?url=%2Fassets%2Fimages%2Flogo.png&w=256&q=75"
+                alt="Logo"
+                style={{ cursor: "pointer" }}
+              />
+            </Link>
             <div style={{ fontSize: "20px", color: "#ff00f2" }}>Guaranteed Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span></div>
-            <div style={{ fontSize: "20px", color: "#ff00f2" }}>FCFS Whitelist access: <span style={{ color: "#00ffff" }}>{countdown}</span></div>
+            <div style={{ fontSize: "20px", color: "#ff00f2" }}>FCFS Whitelist access: <span style={{ color: "#00ffff" }}>LIVE</span></div>
+            <div style={{ fontSize: "12px", color: "#00ffff" }}>
+              <Link href="https://docs.google.com/forms/d/1TzmYPtzWh2udYO8RD-ZOSOpSWgewQK_WL4ZaS1UeTb4/" passHref>
+                <a style={{ color: "#00ffff", textDecoration: "none" }}>Join Ambassador Program</a>
+              </Link>
+            </div>
+            <div style={{ fontSize: "12px", color: "#00ffff" }}>
+              <Link href="https://whitelist.beamit.space/" passHref>
+                <a style={{ color: "#00ffff", textDecoration: "none" }}>Alphamint Waitlist</a>
+              </Link>
+            </div>
           </Box>
           <Box className="capchaLoginSectn">
             <Grid
