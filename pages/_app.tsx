@@ -15,6 +15,23 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { Toaster } from "sonner";
 
+
+
+// pages/_app.js
+import { Analytics } from '@vercel/analytics/react';
+import '../styles/globals.css';
+
+function MyApp({ Component, pageProps }) {
+  return (
+    <>
+      <Component {...pageProps} />
+      <Analytics />
+    </>
+  );
+}
+
+export default MyApp;
+
 /**
  * It suppresses the useLayoutEffect warning when running in SSR mode
  */
