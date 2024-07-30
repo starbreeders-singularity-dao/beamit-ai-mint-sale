@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "https://alphamint.beamit.space/",
+      "destination": "https://app.hel.io/pay/669f1691574d605b60da7601",
+      "permanent": true
+    }
+  ]
+}
